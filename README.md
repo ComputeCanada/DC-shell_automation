@@ -306,8 +306,6 @@ For a hypothetical filesystem location of **/home/amanda/data/**, select each of
 ## Working with Data
 
 
-# Going to Use a modification of Cam's setup here.  Have the EPL Hold data and want to know which books have been in the top ten the longest.  Will first do this by branch and then do it for all branches to show off the power of * and the terminal in general.  Finally, will make it a script so that it can be run any time an update to the dataset is pulled in. chmod +x filename.sh
-
 Consider the following data as an example of a spreadsheet that a librarian may find themself working with.
 
 ![SpreadsheetSample](spreadsheetSample.png)
