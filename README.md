@@ -1,45 +1,58 @@
-# The Shell
+Modified from content [HERE](https://github.com/datacarpentry/2015-05-30-HASTAC/blob/gh-pages/shell-intro/README.md), [HERE](https://github.com/datacarpentry/2015-05-30-HASTAC/blob/gh-pages/shell-libcatalogue/report-data.md), and [HERE](https://github.com/ComputeCanada/2017-05-15-ualberta/blob/gh-pages/__CommandLineResources/CommandLineWalkThrough.md) with thanks to the earlier contributors Cam Macdonell, Tracy Teal, Greg Wilson, Dennis Tennen, Paul Wilson, Milad Fatenejad, Sasha Wood, and Radhika Khetani.
 
-Author: Tracy Teal  
-Original contributors:
-Paul Wilson, Milad Fatenejad, Sasha Wood and Radhika Khetani for Software Carpentry (http://http://software-carpentry.org/)
+<!--
+To add...
 
-## Objectives
-- What is the shell?
-- How do you access it?
-- How do you use it?
-  - Getting around the Unix file system
-  - looking at files
-  - manipulating files
-  - automating tasks
-- What is it good for?
-- Where are resources where I can learn more? (because the shell is awesome)
+1. Build slides for the challenge/comprehension questions
+2. Add aside about existence and use of `find`
+-->
 
-## What is the shell?
+
+# \*nix Walkthrough
+
+<!-- Note that zero width spaces (U+200B) are used in this document when formatting stops in the middle of a word. -->
+
+This is a script of sorts for running the Bash shell portion of a Software Carpentry Workshop with Digital Humanities researchers.  It is based on content from the Software Carpentry shell-novice lessons.
+
+Four things to make clear before heading into this workshop:
+
+1. Silence is golden (or frustrating)
+2. Capitalization matters
+3. Spaces matter
+4. Everything is a file
+
+Yes, these will be brought up throughout the workshop as they arise but there are enough pitfalls for participants without having these snags waiting for them too.
+
+## Shell Overview
 
 The *shell* is a program that presents a command line interface
 which allows you to control your computer using commands entered
 with a keyboard instead of controlling graphical user interfaces
-(GUIs) with a mouse/keyboard combination.
+(GUIs) with a mouse/keyboard combination.  The terms "shell" and "command line" are often used interchangeably.  When most people talk about working in a shell or on a command line the operating system that they are using is usually a flavour of GNU-Linux and will often be assumed to be the case.[^GNU-Linux]
+
+[^GNU-Linux]: We use the term "GNU-Linux" her rather than the more common "Linux" to pay respect to its full history rather than just one event.  When Richard Stallman started the GNU (GNU's Not Unix) project he was able to assemble a wide range of important and useable tools, he just wasn't able to get a kernel, roughly the program that handles all the inputs and outputs from the hardware associated with a computer.  That kernel was eventually provided by Linus Torvalds.  Both the tools and the kernel are essential to the project and the name "GNU-Linux" appropriately acknowledges this.
+
+There is more than one shell and each shell can come in different versions.  The shell that we will be using today is the most common.  It is known as BASH, which stands for "Bourne Again SHell".[^BASH]
+
+[^BASH]: The shell's name is an acronym for Bourne-again shell, punning on the name of the Bourne shell that it replaces[11] and on the term "born again" that denotes spiritual rebirth in contemporary American Christianity [Wikipedia](https://en.wikipedia.org/wiki/Bash_(Unix_shell)). This is programmer humour.
 
 There are many reasons to learn about the shell.
 
-* For most bioinformatics tools, you have to use the shell. There is no
-graphical interface. If you want to work in metagenomics or genomics you're
-going to need to use the shell.
-* The shell gives you *power*. The command line gives you the power to do your work more efficiently and
-more quickly.  When you need to do things tens to hundreds of times,
+* For some tools, such as Mallet (a popular topic modeller) you have to use the shell. There is no graphical interface. If you want to collaborate with people from the sciences this will become even more common.
+* Most shells were written in the C language to process text context.  They are very fast and can give you the power to do your work more efficiently and
+more quickly.  When you need to do things tens to thousands of times,
 knowing how to use the shell is transformative.
+* Using the shell gives you the ability to have repeatable data processing.
 * To use remote computers or cloud computing, you need to use the shell.
 * We're going to use it in this class, for all of the reasons above.
+* If you are going to work with GNU-Linux, the standard OS for scientific and high-performance computing, then you'll end up here sooner or later.
 
-![Automation](gvng.jpg)
 
-  Unix is user-friendly. It's just very selective about who its friends are.
-  - Anonymous
+In this portion of the workshop we're going to:
 
-Today we're going to go through how to access Unix/Linux and some of the basic
-shell commands.
+* learn how to use BASH by using BASH
+* learn about why shells are the way they are
+* automate a repetitive process
 
 ## Information on the shell
 
@@ -48,1017 +61,607 @@ shell cheat sheets:<br>
 * [https://github.com/swcarpentry/boot-camps/blob/master/shell/shell_cheatsheet.md](https://github.com/swcarpentry/boot-camps/blob/master/shell/shell_cheatsheet.md)
 
 Explain shell - a web site where you can see what the different components of
-a shell command are doing.  
+a shell command are doing.
 * [http://explainshell.com](http://explainshell.com)
 * [http://www.commandlinefu.com](http://www.commandlinefu.com)
 
-## Outline
-
-* A shell use case
-* How to access the shell
-
-
-
-## An automation use case
-
-
-
-
-Text Complexity in Newspapers
-http://cdn.lexile.com/m/cms_page_media/135/Text%20Complexity%20of%20English%20International%20Newspapers_1.pdf
-
-Another newspaper case
-
-Get the front page of the newspaper from a particular newspaper in different years
-http://chroniclingamerica.loc.gov/lccn/sn98066406/issues/first_pages/
-
-Count occurances of a particular word
-
-
-
 ## How to access the shell
 
-The shell is already available on Mac and Linux. For Windows, you'll
-have to download a separate program.
+The shell is already available on Mac and Linux. For Windows, you'll have to download a separate program.
 
 
-Mac
----  
-On Mac the shell is available through Terminal  
-Applications -> Utilities -> Terminal  
-Go ahead and drag the Terminal application to your Dock for easy access.
+###Mac
+---
+Mac OSX is built on top of a version of BSD (Berkeley Software Distribution), a series of Unix variants. As a consequence it has a shell built in that will do everything we need it to today.  To access the shell either:
 
-Windows
--------
-For Windows, we're going to be using gitbash.  
-Download and install [gitbash](http://msysgit.github.io)
-Open up the program.
+* From the Finder go through the following folders: Applications -> Utilities -> Terminal.  
+* Hold down the Command Key and press the Spacebar.  In the Spotlight search window that appears start typing "Terminal".
 
-Linux  
------
-Well, you should be set.
+Regardless of the method used you will likely find it useful to drag the Terminal application icon to your Dock for easy access in the future.
 
+###Windows
+---
+Windows is its own operating system with its own development history and as a result it has something that _looks_ like BASH but that isn't, the Command Prompt.  So, we'll need to install a program that emulates BASH on Windows.  They're are more than a few options for this but we're going to recommend the [home, portable edition of MobaXterm](http://download.mobatek.net/10220170312132617/MobaXterm_Portable_v10.2.zip).  The portable edition installs everything in one folder, making it easy to find and easy to remove if you decide you don't like it.  We recommend installing it on your desktop so it is easy to find.
 
+MobaXterm has the ability to install software that we might need later and we will make use of this feature as the need arises.  One tool that we will need to install outside of the shell is Git (this is a version control tool but we will use it to make sure you have a copy of all the workshop content).  To install it go to the [MobaXterm Plugins Page](http://mobaxterm.mobatek.net/plugins.html) and download the git plugin.  This will put a file named "Git.mxt3" in your downloads folder.  Just drag and drop this file into the MobaXterm folder and you're done.
 
-## Starting with the shell
+###GNU-Linux
+---
+GNU-Linux, even versions with Graphical User Interfaces, is built on/around a shell environment so you will have one installed by default.  There are many variants of GNU-Linux so describing how to get to the shell is unlikely to be of much help.  Fortunately, most GNU-Linux users usually come to the workshop knowing how to access the shell on their system.  If this is not the case then just let someone who is part of the workshop know and they'll help you out.
 
-We will spend most of our time learning about the basics of the shell
-by manipulating some experimental data from a hearing test.
+Note that it is possible that your shell isn't BASH.  In somecases this won't matter and you can likely follow along since most of the commands we will look at today will be interchangeable across shells.  If this proves challenging then you can likely switch to BASH by typing `$ bash` at the command prompt (we'll explain this next). If you are unsure what shell you have you can type `$ echo $0` and you should see `-bash` as the result if you are using BASH.
 
-We're going to create a directory that we're going to do this work in
-and then download the data.
+## Entering Commands & Navigation
+Open a BASH terminal window and you'll see:
+	
+	"some information about the user/system" $ 
 
-To create the directory type:
-    mkdir carpentry
-This means, make directory 'carpentry'
+We'll ignore the "some information about the user/system" and just abbreviate this to "$" in the command examples shared here.  Don't type the "$" it's there just to tell you to type what is after it.  If you see content in the text block that doesn't have a prompt then it is either wraping over from the line above or output, context will usually make this clear.
 
-Now we're going to go in to that directory
-    cd carpentry
-This stands for 'change directory'
+If you want to give yourself some extra space by removing the "some information about the user/system" for the duration of this BASH session then type the command: `PS1='$ '` into your shell, your window should look like all the examples in this workshop.  This isn’t necessary to follow along (in fact, your prompt may have helpful information you want to know about). This is up to you!
 
-Now let's look at see what's in here. There should be nothing
-right now, because we just made it, but let's check. Type:
-    ls
-ls stands for 'list' and it lists the contents of a directory.
+Let's get started. Type:
 
-Now we're going to download the data for the tutorial. For this you'll need
-internet access, because you're going to get it off the web.  
-Enter the command:
+	$ whoami
 
-    git clone https://github.com/tracykteal/msu_al340.git
+Then press the enter key.  The response will be `someusername` (Hopefully yours!).  
 
-This command will grab all of the data needed for this workshop from
-the internet.  (We're not going to talk about git right now, but it's a tool for
-doing version control.)
+What is happening here when we type `whoami`?  A process along the lines of the following takes place:
 
-If this doesn't work, you can download it from
+1. the computer looks for a program called `whoami` in what is known as the PATH, a set of directories it expects to find programs in.
+2. it runs that program 
+3. it displays that program’s output, then
+4. it displays a new prompt to tell us that it’s ready for more commands.
 
-   http://teckla.idyll.org/~tracyt/transfer/msu_al340.zip
+Let's find out where we are:
 
-Now let's check to see that we got the data. Again type:
-    ls
-Now we should see a list of a lot of files, including something called data.
+	$ whereami
 
-In there, all mixed up together are files and directories/folders. If we want to
-know which is which, we can type:
-    ls -F
-Anything with a "/" after it is a directory.  
-Things with a "*" after them are programs.  
-It there's nothing there it's a file.
+While it might seem like this would tell you where you are (within the directory structure of the system, not in the galaxy) it will fail with something like *whereami: command not found*.
 
-You can also use the command `ls -l` to see whether items in a
-directory are files or directories. `ls -l` gives a lot more
-information too, such as the size of the file
+So, the command we actually need is:
 
-So, we can see that we have several files, directories and a program. Great!
+	$ pwd
 
-## The Unix directory file structure (a.k.a. where am I?)
+This stands for "Print Working Directory" and you'll get something that looks like */Users/someusername*.  But why doesn't `$ whereami` work?  Enter slides #1 and #2
 
-As you've already just seen, you can move around in different directories
-or folders at the command line. Why would you want to do this, rather
-than just navigating around the normal way.
+--
 
-When you're working with bioinformatics programs, you're working with
-your data and it's key to be able to have that data in the right place
-and make sure the program has access to the data. Many of the problems
-people run in to with command line bioinformatics programs is not having the
-data in the place the program expects it to be.
+###SLIDE 1 & 2: Cathedral vs Bazaar / Linux Flavours
+Take a moment here to share a brief history of GNU-Linux.  Core points:
 
-The file structure looks like this:
+1. How GNU-Linux Started (Richard Stallman)
+2. How it developed (Eric S. Raymond)
+3. Where it is now (Linux Flavours)
 
-![Unix](Slide1.jpg)
+--
 
-## Moving around the file system
+### Basics of Looking, Moving, and Creating
 
-Let's practice moving around a bit.
+Let's look around inside the current directory.
 
-We're going to work in that data directory we just downloaded.
+	$ ls
 
-First let's navigate there using the regular way.
+We'll see a list of files inside this directory.  Let's call this the "***l***​ist directory ***s***​tructure" command.  
 
-First we did something like go to the folder of our username. Then we opened
-'carpentry', then 
-and finally 'data'
+We can also look around from where we are.  It is really likely that when you ran `ls` that it told you that there was a folder called "Desktop" in your current directory.  Let's see what is inside there:
 
-Let's draw out how that went.
+	$ ls Desktop
 
-Now let's draw some of the other files and folders along that way.
+What you see when you run this command should be exactly what is on your Desktop.  To confirm this you are encouraged to use your Graphical User Interface to change your desktop contents and then run the command again.
 
-This is called a hierarchical file system structure, like an upside down tree
-with root (/) at the base.
+Rather than just look at the Desktop folder let us make it the active directory:
 
-When you are working at your computer or log in to a remote computer,
-you are on one of the branches of that tree, your home directory (/home/username)
+	$ cd Desktop
 
-Now let's go do that same navigation at the command line.
+`cd` is the _change directory_ command and it allows us to change what our active directory is within the shell.  To see what this means run the `ls` command again and note how the result is now the same as when `ls Desktop` was run when your home directory was the active one.
 
-Type
-    cd
-This put's you in your home directory. This folder here.
 
-Now using `cd` and `ls`, go in to the 'data' directory and list its contents.
+We are going to create a directory to hold the files that we will be working with.  We are going to do this in the Desktop directory because it will be very easy to see the consequences of what you do here.
 
-Let's also check to see where we are. Sometimes when we're wandering around
-in the file system, it's easy to lose track of where we are and get lost.
+	$ mkdir Data Carpentry
 
-If you want to know what directory you're currently in, type
-    pwd
-This stands for 'print working directory'. The directory you're currently
-working in.
+> Have them minimize their window and go and look at their desktop to see the new folder.  Have them actually open the folder with their GUI so that they can watch what happens *and have multiple ways of interacting with the files*.  This last part is important since there is more than one way to get things done.
 
-What if we want to move back up and out of the 'data' directory? Can we just
-type 'carpentry'? Try it and see what happens.
+> Point out that they can swap between windows with CMD-TAB (MAC) / ALT-TAB (WINDOWS / LINUX).
 
-To go 'back up a level' we need to use `..`
+Double check that the folder is ther by using `ls` too.  Wait... Folder_s_!?!  What happened?
 
-Type
-    cd ..
+The **ls** command will show that we have made a mistake: there are *two* directories---one called "Data" and another called "Carpentry"---rather than one "Data Carpentry" directory.  This highlights two important things for the class to remember:
 
-Now do `ls` and `pwd`. See now that we went back up in to the 'carpentry'
-directory. `..` just means go back up a level.
+1. The computer does what you tell it, not necessarily what you wanted.
+2. Spaces matter on the command line, they are punctuation.
 
-***
-**Exercise**
+We can fix the first by being patient and careful.  We can fix the second by:
 
-Now we're going to try a hunt.  
-Move around in the 'hidden' directory and try to find the file youfoundit.txt
-***
+1. Not using spaces via:
+	1. Camel Case
+	2. Dashes
+	3. Underscores
+2. Escaping the space by preceding it with a "\".
+3. Wrapping content with spaces in double quotes.
 
+Let's make the proper directory using underscores and move into that directory (We'll come back to clean up the extra folders later):
 
-## Arguments
+	$ mkdir Data_Carpentry
+	$ cd Data_Carpentry
 
-Most programs take additional arguments that control their exact
-behavior. For example, `-F` and `-l` are arguments to `ls`.  The `ls`
-program, like many programs, take a lot of arguments. But how do we
-know what the options are to particular commands?
+> If **scrolling through the history** with the arrow keys has not come up yet then this is a good time to prompt it.
 
-Most commonly used shell programs have a manual. You can access the
-manual using the `man` program. Try entering:
+Now we'll get the data that we need for the rest of this portion of the workshop by issuing the following command:
 
-    man ls
+	$ git clone https://github.com/ComputeCanada/DC-shell_automation  
 
-This will open the manual page for `ls`. Use the space key to go
-forward and b to go backwards. When you are done reading, just hit `q`
-to quit.
+(For this to work you need both a tool called git installed and a working internet connection on the computer you are using.  If it fails just let someone helping with the workshop know and we'll get you helped out.)
 
-Programs that are run from the shell can get extremely complicated. To
-see an example, open up the manual page for the `find` program.
-No one can possibly learn all of
-these arguments, of course. So you will probably find yourself
-referring back to the manual page frequently.
+Git is a tool designed for managing software development by providing version control.  One of the nice bonuses tha comes along with using it is that you are able to make copies of other people's work as long as they have been shared within an online space for this purpose (these spaces are usually known as "repositories").  Git is covered in Software Carpentry so this is all we're going to do with it today.
 
+### Beyond the Basics of Looking, Moving, Creating, and now _Destroying_
 
+If successful the `git clone` command will have made new directory on your desktop called "DC-shell_automation".  Let's move into it:
 
-## Examining the contents of other directories
+	$cd DC-shell_automation
+	
+> If **tab completion** has not come up by now then this is the time to introduce it.
 
-By default, the `ls` commands lists the contents of the working
-directory (i.e. the directory you are in). You can always find the
-directory you are in using the `pwd` command. However, you can also
-give `ls` the names of other directories to view. Navigate to the
-home directory if you are not already there.
+Once you are inside this directory have a look around:
 
-Type:
+	$ ls
 
-    cd
+Once you've seen what's here try the following variants of the `ls` command to see what happens:
 
-Then enter the command:
+	$ ls -a
 
-    ls carpentry
+	$ ls -l
+	
+	$ ls -F
 
-This will list the contents of the `carpentry` directory without
-you having to navigate there.
+These new options are called "flags" and adding them to the command turns on (or sometimes off) various features.  `-a` is the "show all" flag and it will show all files in the directory.  `-l` is the "long format" flag and it will give more information about each file.  `-F` is the "disambiguate folders" flag and will put a `/` after folders and a `*` after exectuables.
 
+There are often a lot of flags available for each command.  To see what they are for each command you have two options:
 
-The `cd` command works in a similar way. Try entering:
+1. Use the "man" pages if they are available.
 
-    cd
-    cd carpentry/hidden
+		$ man ls
 
-and you will jump directly to `hidden` without having to go through
-the intermediate directory.
+2. Search on the Internet.  This will be the case for those using MobaXterm (sorry these are not installed by default and installing them is beyond the scope of this workshop). 
 
-***
-**Exercise**
 
-Try finding the anotherfile.txt file without changing directories.
-***
+>**Question:** What will `$ ls -al` do?
 
-## Full vs. Relative Paths
+>**Answer:** List all the files in a long format.
 
-The `cd` command takes an argument which is the directory
-name. Directories can be specified using either a *relative* path a
-full *path*. The directories on the computer are arranged into a
-hierarchy. The full path tells you where a directory is in that
-hierarchy. Navigate to the home directory. Now, enter the `pwd`
-command and you should see:
+>Look at the output and point out the files **./** and **../**.  Point out that the single dot is a self reference to this directory and that the double dot is a reference to the directory above this one.
+ 
 
-    /home/username
+>**Question:** What does *ls ..* do?
 
-which is the full name of your home directory. This tells you that you
-are in a directory called `username`, which sits inside a directory called
-`home` which sits inside the very top directory in the hierarchy. The
-very top of the hierarchy is a directory called `/` which is usually
-referred to as the *root directory*. So, to summarize: `username` is a
-directory in `home` which is a directory in `/`.
+>**Answer:** Show the contents of the directory above the current one.
 
-Now enter the following command:
+At this point they are ready to recognize the basic command structure:
 
-    cd /home/username/carpentry/hidden
+	**command** *space* **flags** *space* **list of files separated by spaces**
 
-This jumps to `hidden`. Now go back to the home directory (cd). We saw
-earlier that the command:
+Have them look in the root directory with:
 
-    cd carpentry/hidden
+	$ ls /
 
-had the same effect - it took us to the `hidden` directory. But,
-instead of specifying the full path
-(`/home/username/carpentry/hidden`), we specified a *relative path*. In
-other words, we specified the path relative to our current
-directory. A full path always starts with a `/`. A relative path does
-not. You can usually use either a full path or a relative path
-depending on what is most convenient. If we are in the home directory,
-it is more convenient to just enter the relative path since it
-involves less typing.
+--
+###Slide 3: Discovering Flag Properties
 
-Over time, it will become easier for you to keep a mental note of the
-structure of the directories that you are using and how to quickly
-navigate amongst them.
+>**Comprehension Test:** What do the flags -s, -h, and -r do when combined with the ls command?
 
-***
-**Exercise**
+>**Answer:** They can look these up using **man ls** or just try them out.
 
-Now, list the contents of the /bin directory. Do you see anything
-familiar in there?
-***
+--
 
+Remember `man -k search_word` for finding `man` commands.  You may need to be creative with the terms you use.
 
-## Saving time with shortcuts, wild cards, and tab completion
+### Moving Around
 
-### Shortcuts
+The change directory command `cd` can be substituted for the list directory structure `ls` command with everything you have learned so far.
 
-There are some shortcuts which you should know about. Dealing with the
-home directory is very common. So, in the shell the tilde character,
-`~`, is a shortcut for your home directory. Navigate to the `carpentry`
-directory:
+>**Challenge:** Go to the root directory
 
-    cd
-    cd carpentry/hidden
+>**Solution:** `$ cd /`
 
-Then enter the command:
+After this challenge a bigger problem faces the students: how to get back the where they were.  The long way would be to figure out the the directory structure with tab completion.  Better would be to "just know" the directory structure but this takes a long time.  Fortunately there is the shortcut:
 
-    ls ~
+	$ cd ~
 
-This prints the contents of your home directory, without you having to
-type the full path. The shortcut `..` always refers to the directory
-above your current directory. Thus:
+The "~" is the "tilde" character and it is usually found with the "backtick" character under the ESC key.  It can be accessed by holding SHIFT and pressing "\`".
 
-    ls ..
+Actually, there is even a shortcut for the shortcut!  `cd` is the equivalent of `cd ~`.
 
-prints the contents of the `/home/username/carpentry`. You can chain
-these together, so:
+--
+###Slide 4: Going Home
 
-    ls ../../
+> **Comprehension Test:**
+For a hypothetical filesystem location of **/home/amanda/data/**, select each of the below commands that Amanda could use to navigate to her home directory, which is **/home/amanda**
 
-prints the contents of `/home/username` which is your home
-directory. Finally, the special directory `.` always refers to your
-current directory. So, `ls`, `ls .`, and `ls ././././.` all do the
-same thing, they print the contents of the current directory. This may
-seem like a useless shortcut right now, but we'll see when it is
-needed in a little while.
+> 1. cd .
+> 2. cd /
+> 3. cd /home/amanda
+> 4. cd ../..
+> 5. cd ~
+> 6. cd home
+> 7. cd ~/data/..
+> 8. cd
+> 9. cd ..
 
-To summarize, while you are in the `shell` directory, the commands
-`ls ~`, `ls ~/.`, `ls ../../`, and `ls /home/username` all do exactly the
-same thing. These shortcuts are not necessary, they are provided for
-your convenience.
+> **Answer:** 3, 5, 8, 9
 
-### Our data set: Interview Subjects
+--
 
-We want to interview people about their experience in the Polar Vortex of
-2014 to create a story of survival.  A few different undergraduate interview
-people on campus and ask their date of birth, gender, Critical Internal temperature type (CI type), Volume of snow experienced, Range they had to walk and
-their self-reported ability to Discriminate temperature.
+###Slide 5: Translation 1
+>**QUESTION:** If someone is in /Users/nelle/ then how do they get to /Users/larry/ using cd and a relative address?
+>
+>**ANSWER:** `cd ../larry`
 
-Each interview
-was written out to a text file, one set per file.
-Each participant has a unique subject ID, and a made-up subject name.
-Each interview has a unique experiment ID. The undergraduates have
-collected 351 files so far.
+--
 
-The data is a bit of a mess! There are inconsistent file names, there
-are extraneous "NOTES" files that we'd like to get rid of, and the
-data is spread across many directories. We are going to use shell
-commands to look at this dat and get it into shape.
+>**EXERCISE:** A treasure hunt.  Find the file named "youfoundit.txt" located somewhere within the hidden folder in the content that we pulled down from GitHub using the GitClone command 
 
 
-### Wild cards
+## Working with Data
 
-Navigate to the `~/carpentry/data/THOMAS` directory. This
-directory contains our hearing test data for THOMAS. If we type `ls`,
-we will see that there are a bunch of files which are just four digit
-numbers. By default, `ls` lists all of the files in a given
-directory. The `*` character is a shortcut for "everything". Thus, if
-you enter `ls *`, you will see all of the contents of a given
-directory. Now try this command:
 
-    ls *1
+# Going to Use a modification of Cam's setup here.  Have the EPL Hold data and want to know which books have been in the top ten the longest.  Will first do this by branch and then do it for all branches to show off the power of * and the terminal in general.  Finally, will make it a script so that it can be run any time an update to the dataset is pulled in. chmod +x filename.sh
 
-This lists every file that ends with a `1`. This command:
+Consider the following data as an example of a spreadsheet that a librarian may find themself working with.
 
-    ls /usr/bin/*.sh
+![SpreadsheetSample](spreadsheetSample.png)
 
-Lists every file in `/usr/bin` that ends in the characters `.sh`. And
-this command:
+Our task is to figure out the top ten titles for 2016 at a given library branch in Edmonton.  We could do this with a spreadsheet program but only if we only had to do it a few times.  After a point being able to write a script to automate a process becomes really valuable.
 
-    ls *4*1
+![Automation](gvng.jpg)
 
-lists every file in the current directory whose name contains the
-number `4`, and ends with the number `1`. There are four such files:
-`0241`, `0341`, `0431`, and `0481`.
+We could also use a programming language to do this but we're going to wait until tomorrow to see what we can do there.  Besides, there are things that can be done on the command line much faster than the alternatives once the commands are known.  The point here is not an expectation that you'll be a shell scripting expert after this but rather that you'll have a strong sense about what is possible.
 
-So how does this actually work? Well...when the shell (bash) sees a
-word that contains the `*` character, it automatically looks for filenames
-that match the given pattern. In this case, it identified four such
-files. Then, it replaced the `*4*1` with the list of files, separated
-by spaces. In other words, the two commands:
+### Viewing files
 
-    ls *4*1
-    ls 0241 0341 0431 0481
+We'll start by moving into the LibraryData folder and having a look at the content of the files.
 
-are exactly identical. The `ls` command cannot tell the difference
-between these two things.
+	$ cd LibraryData
+	$ ls
+	EPLABB.csv		EPLIDY.csv		EPLMLW.csv
+	EPLCAL.csv		EPLJPL.csv		EPLMNA.csv
+	EPLCLV.csv		EPLLCP.csv		EPLRIV.csv
+	EPLCPL.csv		EPLLHL.csv		EPLSPW.csv
+	EPLCSD.csv		EPLLON.csv		EPLSTR.csv
+	EPLGMU.csv		EPLMCN.csv		EPLWHP.csv
+	EPLHIG.csv		EPLMEA.csv		EPLWMC.csv
 
-* * * *
-**Short Exercise**
+Each of these files is a listing of the top ten books with the highest number of holds at Edmonton Public Library, each week from 9 AM Monday to 9 AM Monday, organized by customer home library branch.  These are comma separated value files.
 
-Do each of the following using a single `ls` command without
-navigating to a different directory.
+We can look into them individually by using the concatenate command on the first CSV file:
 
-1.  List all of the files in `/bin` that start with the letter 'c
-2.  List all of the files in `/bin` that contain the letter 'a'
-3.  List all of the files in `/bin` that end with the letter 'o'
+	$ cat EPLABB.csv
+	Row ID,Branch ID,Branch Name,Number of Holds,Title,Author,As of Date,Web URL
+	EPLABB20150316Fifty shades of Grey / E.L. James,EPLABB,Abbottsfield - Penny McKee Branch,5,Fifty shades of Grey / E.L. James,James E L,03/16/2015 12:00:00 AM,http://epl.bibliocommons.com/search?t=smart&q=fifty%20shades%20of
+	EPLABB20150316The back of the turtle : a novel / Thomas King,EPLABB,Abbottsfield - Penny McKee Branch,6,The back of the turtle : a novel / Thomas King,King Thomas,03/16/2015 12:00:00 AM,http://epl.bibliocommons.com/search?t=smart&q=the%20back%20of
+	...
 
-BONUS: List all of the files in '/bin' that contain the letter 'a' or 'c'
+`cat` is the command to concatenate files.  Concatenation is a join operator.  The command also prints out the consequences of the concatenation to the screen.  If you only give it one file then it just spits back that one file.  This is a great example of tools being very useful but not quite in the way that their name or historical purpose might suggest.
 
-* * * *
+>**Question:** What will the *-n* flag do when run with **cat**?
 
-### Tab Completion
+>**Answer:** Prints the line numbers for each line in each file.
+>
+>Note that it appears that the -n flag does not funciton with MobaXterm.
 
-Navigate to the home directory. Typing out directory names can waste a
-lot of time. When you start typing out the name of a directory, then
-hit the tab key, the shell will try to fill in the rest of the
-directory name. For example, enter:
+chances are that this looks terrible on your screen, making it a real challenge to see what's there.  Instead of `cat` we can use a special command just for looking at the top of files:
 
-    cd m<tab>
+	$ head -n 1 EPLABB.csv
+	Row ID,Branch ID,Branch Name,Number of Holds,Title,Author,As of Date,Web URL
 
-The shell will fill in the rest of the directory name for
-`carpentry`. Now go to carpentry/data/THOMAS
+`head` allows us to just look at the head of a file.  The optional `-n` flag followed by a number tells it how many lines to return.  Increasing the flag value to 2 will give us both the header *and* the first line, allowing us to see what we are working with without being overwhelmed.
 
-    ls 02<tab><tab>
+	$ head -n 2 EPLABB.csv 
+	Row ID,Branch ID,Branch Name,Number of Holds,Title,Author,As of Date,Web URL
+	EPLABB20150316Fifty shades of Grey / E.L. James,EPLABB,Abbottsfield - Penny McKee Branch,5,Fifty shades of Grey / E.L. James,James E L,03/16/2015 12:00:00 AM,http://epl.bibliocommons.com/search?t=smart&q=fifty%20shades%20of
 
-When you hit the first tab, nothing happens. The reason is that there
-are multiple directories in the home directory which start with
-`02`. Thus, the shell does not know which one to fill in. When you hit
-tab again, the shell will list the possible choices.
+Our process from here is going to roughly be the following:
 
-Tab completion can also fill in the names of programs. For example,
-enter `e<tab><tab>`. You will see the name of every program that
-starts with an `e`. One of those is `echo`. If you enter `ec<tab>` you
-will see that tab completion works.
+* get rid of the header
+* extract the title from each line
+* count the number of times each appears
+* sort the resulting list
 
-## Command History
+While we are about to go through the details on how to do this note that typically the details matter much less than being able to imagine how a file might be processed in the first place.  The details are just syntax.  Here goes!
 
-You can easily access previous commands.  Hit the up arrow.
-Hit it again.  You can step backwards through your command history.
-The down arrow takes your forwards in the command history.
+We can cut the header by using the sister tool to the `head` command with a special input to the number flag:
 
-^-C will cancel the command you are writing, and give you a fresh prompt.
+	$ tail -n +2 EPLABB.csv
 
-^-R will do a reverse-search through your command history.  This
-is very useful.
+Usually when `tail` is passed the `-n` flag it is given a number _without_ the `+` and `tail` then counts from the bottom of the file up the number of lines specified and returns those lines.  We don't know how many lines from the bottom we are though.  By adding the `+` we are telling tail to count from the top and to take everything from that line on down.
 
-You can also review your recent commands with the `history` command.  Just enter:
+So, we can now have the file print on the screen without the header row.  The next step in our plan is to extract the titles and to do this we'll need to pass what is currently being printed on the screen to another tool and to do this you will need to learn about the redirect character: `|`.  This is known as the "pipe" character and it is found with the `\` character just above the enter key on most Western keyboards.  With it we can pass the input of one command to another rather than chaining it to a file.
 
-    history
+Let's start with an example.  Suppose that you wanted to check that using `+` with `tail` was inclusive and you wanted to avoid scrolling all the way to the top to check that the line just below the header was all that was returned.  You could do this by "piping" the tail command to the head command, as follows:
 
-to see a numbered list of recent commands, including this just issues
-`history` command.  You can reuse one of these commands directly by
-referring to the number of that command.
+	$ tail -n +1 EPLABB.csv | head -n 1
+	Row ID,Branch ID,Branch Name,Number of Holds,Title,Author,As of Date,Web URL
 
-If your history looked like this:
+What we need to do is take the output of our `tail` command and pipe it to the `cut` tool.  Cut allows for lines in files to be sliced at a specified delimiting character into fields and then for the specified fields to be returned.  We know that we have a _comma_ separated values file and by looking at our header row we see that the title is the fifth item so we can issue the following command:
+	
+	$ tail -n +2 EPLABB.csv | cut -d , -f 5 
+	Fifty shades of Grey / E.L. James
+	The back of the turtle : a novel / Thomas King
+	Minecraft annual / [edited by Jane Riordan ; written by Jane Riordan with 3 others]
+	Yes please / Amy Poehler
+	Crash & burn : a novel / Lisa Gardner
+	...
 
-    259  ls *
-    260  ls /usr/bin/*.sh
-    261  ls *4*1
+That's pretty neat.  There is a problem though, some of the lines are not returning the title / author combo that we expect?
 
-then you could repeat command #260 by simply entering:
+> **Question:** What is happening here and why?
+> 
+> **Answer:** `cut` isn't clever enough to know that it is dealing with a CSV file and so it treats commas as commas no matter where they are.  The lines that are returning EPLABB actually have commas in the title of the book and this shifts the field that is returned on those lines.  
 
-    !260
+This is potentially a serious problem for us because we cannot count on a particular number of commas.  This is also good reason _not_ to choose a delimiter that appears elsewhere in the file.  There are two fairly straight forward ways around this:
 
-(that's an exclamation mark).
+1. Use `csvtool` to recognize what commas are delimiters and which are part of the content of a field.
+2. Use the setup of the file to our advantage.
 
-* * * *
-**Short Exercise**
+While #1 would be nice we can't really pursue it here because of all the MacOS users in the room.  Why is this a problem?  As mentioned earlier, MacOS is based on a variant of BSD, a variant that is locked down such that it is not at all straightforward to install new GNU-Linux tools on the system.  Since we're going for cross-platform as much as possible we're going to need to find another way.
 
-1. Find the line number in your history for the last exercise (listing
-files in /bin) and reissue that command.
+> **Question:** Where else does the title appear and how might we use `cut` to get it?
+> 
+> **Answer** In the Row ID and we can cut at the `/` if we are willing to lose the author and keep some junk for the time being.
 
-* * * *
+Let's do this:
 
-## Which program?
+	$ tail -n +2 EPLABB.csv | cut -d / -f 1 
+	EPLABB20150316Fifty shades of Grey 
+	EPLABB20150316The back of the turtle : a novel 
+	EPLABB20150316Minecraft annual
 
-Commands like `ls`, `rm`, `echo`, and `cd` are just ordinary programs
-on the computer. A program is just a file that you can *execute*. The
-program `which` tells you the location of a particular program. For
-example:
+So, we're moving along, we just really need to get rid of the coding information before the title.  To do this we need to pass our current output to another tool, one that is able to read lines and make replacements/removals of text based on patterns.  The tool that can do this is `sed`, the **S**tream **ED**itor.
 
-    which ls
+For our purposes `sed` has a special format that looks like this:
 
-Will return "/bin/ls". Thus, we can see that `ls` is a program that
-sits inside of the `/bin` directory. Now enter:
+	sed 's/what_to_find/what_to_replace_with/'
 
-    which find
+What we want to do is remove the "EPL..." content completely so we can just leave the second item empty by removing it completely:
 
-You will see that `find` is a program that sits inside of the
-`/usr/bin` directory.
+	sed 's/what_to_find//'
 
-So ... when we enter a program name, like `ls`, and hit enter, how
-does the shell know where to look for that program? How does it know
-to run `/bin/ls` when we enter `ls`. The answer is that when we enter
-a program name and hit enter, there are a few standard places that the
-shell automatically looks. If it can't find the program in any of
-those places, it will print an error saying "command not found". Enter
-the command:
+This leaves us with the problem of what to find.  Here `sed` is expecting a regular expression, which is a way of declaring patterns of text.  Let's start with a simple one "EPLABB" and add `sed` to our pipeline:
 
-    echo $PATH
+	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/EPLABB//'
 
-This will print out the value of the `PATH` environment variable. More
-on environment variables later. Notice that a list of directories,
-separated by colon characters, is listed. These are the places the
-shell looks for programs to run. If your program is not in this list,
-then an error is printed. The shell ONLY checks in the places listed
-in the `PATH` environment variable.
+Now all the "EPLABB" content is gone.  If we could just add the double quotation marks and the numbers to this removal we'd have what we want.  Let's deal with these in order.  Try just adding a double quotation before the "E":
 
-Navigate to the `shell` directory and list the contents. You will
-notice that there is a program (executable file) called `hello` in
-this directory. Now, try to run the program by entering:
+	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"EPLABB//'
 
-    hello
+The problem with the double quotation marks is that they do not appear on every line and currently our pattern of text must match exactly.  We can fix this by introducing a quantifier, a character that tells the regular expression engine to match a varying number of a character.  In this case we want to say "zero or more" and we do this with an `*` like so
 
-You should get an error saying that hello cannot be found. That is
-because the directory `/home/username/carpentry` is not in the
-`PATH`. You can run the `hello` program by entering:
+	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB//'
+	
+Here the `*` says match the preceeding character (a `"`) zero or more times.  Nice.
 
-    ./hello
+Next we need to get rid of the date information.  Here we will make use of ranges and a different quantifier.  The regular expression engine understands `[0-9]` to be a stand-in for the numerals 0, 1, 2, 3, up to 9.  We can add it to our regular expression and see that it will indeed allow us to remove the first digit.
 
-Remember that `.` is a shortcut for the current working
-directory. This tells the shell to run the `hello` program which is
-located right here. So, you can run any program by entering the path
-to that program. You can run `hello` equally well by specifying:
+	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB[0-9]//'
 
-    /home/username/carpentry/hello
+There are always eight numerals so we could just repeat `[0-9]` eight times but there is a more concise way.  Instead of writing it out eight times we use a quantifier to tell the regular expression engine exactly how many matches to make.  This looks like `{n}` where `n` is the number of matches to make.  As with the `*` we add this _after_ the character set we wish to quantify:
 
-Or by entering:
+	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB[0-9]{8}//'
+	EPLABB20150316Fifty shades of Grey 
+	EPLABB20150316The back of the turtle : a novel 
 
-    ~/carpentry/hello
+Wait!  How'd we lose our progress?  The problem here is that in the shell curly braces are special characters and we need to tell the shell to just treat them like any other character.  We do this by placing a single `\` in front of each.
 
-When there are no `/` characters, the shell assumes you want to look
-in one of the default places for the program.
+	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB[0-9]\{8\}//'
 
+We now have all the titles.  Nice.
 
-## Examining Files
+Our next task is to count them.  To do this we must first sort them.  It should be little surprise that  `sort` is a command that we can easily add to our pipeline:
 
-We now know how to switch directories, run programs, and look at the
-contents of directories, but how do we look at the contents of files?
+	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB[0-9]\{8\}//' | sort
+	
+We'll now lean on a command called `uniq` (short for "unique") to remove all the duplicate entries.  More than this though we'll pass it the `-c` flag so that it will _count_ the number of entries.
 
-The easiest way to examine a file is to just print out all of the
-contents using the program `cat`. Enter the following command:
+	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB[0-9]\{8\}//' | sort | uniq -c
 
-    cat ex_data.txt
+One last sort, this one with the `-r` flag to reverse the results so the larger number is at the top, and we're done.
 
-This prints out the contents of the `ex_data.txt` file. If you enter:
+	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB[0-9]\{8\}//' | sort | uniq -c | sort -r
 
-    cat ex_data.txt ex_data.txt
+Of course, if you'd like to specify how many lines to print then you can pipe the result to `head` with the `-n` flag on.
 
-It will print out the contents of `ex_data.txt` twice. `cat` just
-takes a list of file names and writes them out one after another (this
-is where the name comes from, `cat` is short for concatenate).
+	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB[0-9]\{8\}//' | sort | uniq -c | sort -r | head -n 10
 
-* * * *
-**Short Exercises**
+## Automating
 
-1.  Print out the contents of the `~/carpentry/dictionary.txt`
-    file. What does this file contain?
+So, we've built a pipeline for EPLABB but what about the other branches?  How can we see the top 10 most popular books in each of those branches?  We could just press the up arrow, scroll to the left, and change the name but there ought to be a better way.  Actually, there is and we're going to do it now.  We're going to turn our pipeline into a script.
 
-2.  Without changing directories, (you should still be in `carpentry`),
-    use one short command to print the contents of all of the files in
-    the `/home/username/carpentry/data/THOMAS` directory.
+### Creating Files
 
-* * * *
+We are now going to make a file.  It is important for the participants to note that what matters here is that *they can create a text file* not what tool they use to make that text file.  We will use **nano** because it is simple, has the instructions listed on the bottom of the screen, and keeps us in the terminal window (which is convenient, that's all), *beyond these reasons there is nothing special about nano*.  What matters is that the tool they choose is a **TEXT EDITOR** and that they can use it.  If they want to use another terminal program (like vim or emacs) or a GUI tool (like TextWrangler, Sublime, or Notepad++) that's just fine.  They need to know that they cannot use tools like Word or LibreOffice because they hide other content even though they look like plain text.
 
-`cat` is a terrific program, but when the file is really big, it can
-be annoying to use. The program, `less`, is useful for this
-case. Enter the following command:
+> If people are using MobaXterm or some other shell that doesn't have nano installed by default then they can likely get it with one of the following commands:
+> 
+> `$ apt-get install nano`
+> 
+> or
+> 
+> `$ yum install nano`
+> 
+> apt-get and yum are package management tools that are likely installed already that can be used to install other software, in this case the text editor Nano.
 
-    less ~/carpentry/dictionary.txt
+**Before we move on copy our current pipeline to your clipboard to save you typing it out from memory.**
 
-`less` opens the file, and lets you navigate through it. The commands
-are identical to the `man` program.
+We will run nano by issuing the command followed by the name of the file we would like to create/edit.
 
-**Some commands in `less`**
+	$ nano top10.sh
 
-| key     | action |
-| ------- | ---------- |
-| "space" | to go forward |
-|  "b"    | to go backwarsd |
-|  "g"    | to go to the beginning |
-|  "G"    | to go to the end |
-|  "q"    | to quit |
+This opens the nano program and allows the declared file to be edited/created.  Nano is text-only, there is no fancy formatting.  The available commands are on the bottom of the screen.  The "^" means "hold the control key and then press the key to the right".
 
-`less` also gives you a way of searching through files. Just hit the
-"/" key to begin a search. Enter the name of the word you would like
-to search for and hit enter. It will jump to the next location where
-that word is found. Try searching the `dictionary.txt` file for the
-word "cat". If you hit "/" then "enter", `less` will just repeat
-the previous search. `less` searches from the current location and
-works its way forward. If you are at the end of the file and search
-for the word "cat", `less` will not find it. You need to go to the
-beginning of the file and search.
+Into this file we are going to paste the pipeline.  Above this add a line that starts with a `#` and follow it with an explanation about what this pipeline does.
 
-Remember, the `man` program actually uses `less` internally and
-therefore uses the same commands, so you can search documentation
-using "/" as well!
+Exit and save your work by:
 
+	^x		(hold control and press 'x')
+	y		(to respond "yes" when they are asked if they want to save the file)
 
+Check that the file is in the folder:
 
-## Redirection
+	$ ls
 
-Let's turn to the interviews that we
-began with. This data is located in the `~/carpentry/data`
-directory. Each subdirectory corresponds to a particular participant
-in the study. Navigate to the `Bert` subdirectory in `data`.  There
-are a bunch of text files which contain experimental data
-results. Lets print them all:
+To view the content of the file we could run `nano` again or just use `cat`.  When you are satisfied that it is there you can run this script by issuing the `bash` command and following it with your file name
 
-    cat au*
+	$ bash top10.sh
+	
+The point with making this script though was to have it work for _any_ of the EPL branch files.  Now that we hawe it working for the first one let's generalize it.  Open it back up:
 
-Now enter the following command:
+	$ nano top10.sh
+	
+Once inside change the pipeline to the following:
 
-    cat au* > ../all_data
+	tail -n +2 "$1" | cut -d / -f 1 | sed 's/"*EPLABB[0-9]\{8\}//' | sort | uniq -c | sort -r | head -n 10
 
-This tells the shell to take the output from the `cat au*` command and
-dump it into a new file called `../all_data`. To verify that this
-worked, examine the `all_data` file. If `all_data` had already
-existed, we would overwritten it. So the `>` character tells the shell
-to take the output from what ever is on the left and dump it into the
-file on the right. The `>>` characters do almost the same thing,
-except that they will append the output to the file if it already
-exists.
+When this script is run the `"$1"` tells the shell to grab the first item following the name of the script on the command line and substitute that value for the `"$1"`.  Once you save and exit nana you can now repeat what we've already done via:
 
-* * * *
-**Short Exercise**
+	$ bash top10.sh EPLABB.csv
+	
+And substitue any of the other branch CSVs as well.
 
-Use `>>`, to append the contents of all of the files whose names
-contain the number 4 in the directory:
+> **Optional:** Add `#!\bin\bash` to the top of the file, use `chmod +x` to make the file executable, and explain the `./` syntax to run this as a "full" script.
 
-    /home/username/carpentry/data/gerdal
+> **To Be Added:** Using `*` and `cat` to pull together all the EPL branch files into one big file for future processing.
 
-to the existing `all_data` file. Thus, when you are done `all_data`
-should contain all of the experiment data from Bert and any
-experimental data file from gerdal with filenames that contain the
-number 4.
+### Cleaning Up
 
-* * * *
+##### ACHTUNG: We are now at the point where you will learn commands that can seriously damage your system.  _Be very sure that you understand what you are doing before you do it._
 
+We are done with the basics of the command line and about to move on to some "real world" examples and writing our own script.  Before we get to this though we should do some quick clean-up.  Specifically, we have some junk folders that we made "by accident", some files that it would be nice put together in a "trash" folder, and some files that would benefit from a ".txt" extension.
 
-## Creating, moving, copying, and removing
+Let's start by getting rid of the folders on the Desktop that we don't need.  Let's see what is here:
 
-We've created a file called `all_data` using the redirection operator
-`>`. This file is critical - it's our interview results - so we want to
-make copies so that the data is backed up.
-Lets copy the file using the `cp` command. The `cp`
-command backs up the file. Navigate to the `data` directory and enter:
+	$ ls ..
 
-    cp all_data all_data_backup
+Which should show us something like:
 
-Now `all_data_backup` has been created as a copy of `all_data`. We can
-move files around using the command `mv`. Enter this command:
+	...
+	Code
+	Command
+	Line
+	Command_Line
+	...
 
-    mv all_data_backup /tmp/
+We want to remove the three accidental folders.  We can do this using the `rm` command, which _removes_ files from the system.  Let's start by testing this with a new junk file:
 
-This moves `all_data_backup` into the directory `/tmp`. The directory
-`/tmp` is a special directory that all users can write to. It is a
-temporary place for storing files. Data stored in `/tmp` is
-automatically deleted when the computer shuts down.
+	$ touch junkFile
+	
+`touch` is the command used to change the modification and access times associated with a file.  Like `cat` it is overloaded.  In this case the overloading creates a file with no content if the file does not already exist and no other parameters are given.  Use `cat` to look inside and `ls -l` to confirm that this is the case.
 
-The `mv` command is also how you rename files. Since this file is so
-important, let's rename it:
+Once you have confirmed that the file is there let's remove it and then check that it is gone:
 
-    mv all_data all_data_IMPORTANT
+	$ rm junkFile
+	$ ls
+	
+##### There is _no_ recycle bin on the command line.  Once you "rm" something it is truly gone (except for the possibility of some very advanced forensics).
 
-Now the file name has been changed to all_data_IMPORTANT. Let's delete
-the backup file now:
+Let's try and remove `Line/` (We'll save `Command` and `Code` for a little trick):
 
-    rm /tmp/all_data_backup
+	$ rm Line
 
-The `mkdir` command is used to make a directory. Just enter `mkdir`
-followed by a space, then the directory name.
+Running this command gives us a warning though and will not complete.  We are told that these are directories.  Directories are just files at their core but they are special files that hold/point to other files and so we cannot simply delete them without deleting their contents.
 
-* * * *
-**Short Exercise**
+>**Question:** How do we see what files are in these directories that we cannot delete?
+>
+>**Answer:** `ls -a`
 
-Do the following:
+What is holding us back are the . and .. files.  If you try to delete them you will be told: `"." and ".." may not be removed` (Think about sitting at the end of a tree branch and cutting it off).  What we need is a special flag to use with the `rm` command.  That flag is `-r` which is the "recursive" flag, telling the command to enter a directory and remove everything inside it, all the way to the bottom.  Let's try it
 
-1.  Rename the `all_data_IMPORTANT` file to `all_data`.
-2.  Create a directory in the `data` directory called `foo`
-3.  Then, copy the `all_data` file into `foo`
+	$ rm -r Line
+	$ ls
 
-* * * *
+And it is gone.
 
-By default, `rm`, will NOT delete directories. You can tell `rm` to
-delete a directory using the `-r` option. Enter the following command:
+Note that like `cat` we can pass multiple files at the same time to `rm` and it will delete each one.  If you have a lot of files to delete the this can still be tedious.  Fortunately there is a wild card character.  Let's test it with some junk files:
 
-    rm -r foo
+	$ touch junk1 junk2 junk3
+	$ ls
+	$ rm junk*
+	$ ls
+	
+Nice.  Now let's remove `Command/` and `Code/`:
 
+	$ rm Co*
 
-## Count the words
+##### Only _think_ about the next question.  Do not figure it out by running it.
 
-The `wc` program (word count) counts the number of lines, words, and
-characters in one or more files. Make sure you are in the `data`
-directory, then enter the following command:
+--
+### Slide7: A serious mistake
+>**Question:** _Without running this command_, what would happen if the command issued was `$ rm -rf /`?
 
-    wc Bert/* gerdal/*4*
+>**Answer:** *Everything* goes since you are telling the computer to *recursively* remove everything in the root folder.  For some "real-world" consequences see [this unfortunate forum post](http://serverfault.com/questions/587102/monday-morning-mistake-sudo-rm-rf-no-preserve-root).  It is possible that you will have some permission or other security mechanisms in place to prevent this but if you are a full administrator it can be done.
+>
 
-For each of the files indicated, `wc` has printed a line with three
-numbers. The first is the number of lines in that file. The second is
-the number of words. Finally, the total number of characters is
-indicated. The final line contains this information summed over all of
-the files. Thus, there were 10445 characters in total.
+--
+###Slide 8: Make me a sandwich
+>Often you will be prevented from doing dangerous things---like deleting crucially important files---because you are just a regular user and not logged in as the *super user*.  It is possible to become the super user on most systems by entering the command **sudo** in front of any other command.  For those working as system administrators on UNIX-like systems a common workflow is the following:
 
-Remember that the `Bert/*` and `gerdal/*4*` files were merged
-into the `all_data` file. So, we should see that `all_data` contains
-the same number of characters:
+	$ tell the computer to do X
+	computer says "No, you don't have permission"
+	$ sudo tell the computer to do X
+	the computer does it (after the right password is entered)
+	
+> You can try sudo with _any_ command to see how it works.  Let's try it with `ls`
+	
+	$ sudo ls
+	Password:
+	<list of directory contents>
 
-    wc all_data
+> [XKCD](https://xkcd.com/149/) has a nice little web comic to bring home how `sudo` is used.
 
-Every character in the file takes up one byte of disk space. Thus, the
-size of the file in bytes should also be 10445. Let's confirm this:
 
-    ls -l all_data
+## Some Fun
 
-Remember that `ls -l` prints out detailed information about a file and
-that the fifth column is the size of the file in bytes.
+On any Debian based system (Ubuntu), try "apt-get moo".
+If you have aptitude installed try, in sequence:
+	
+	aptitude moo
+	aptitude -v moo
+	aptitude -vv moo
+	aptitude -vvv moo
+	aptitude -vvvv moo
 
-* * * *
+play NetHack on line at [https://alt.org/nethack/]()
 
-## The awesome power of the Pipe
+The command `rev` which is part of the util-linux package reverses any text you feed to it:
 
-Suppose I wanted to only see the total number of character, words, and
-lines across the files `Bert/*` and `gerdal/*4*`. I don't want to
-see the individual counts, just the total. Of course, I could just do:
+	fortune | rev
+	.retteb hcum ,hcum ylno ... won thgir era uoy erehw ekil yltcaxe si esidaraPnosrednA eiruaL --
 
-    wc all_data
+Install `links` or `lynx` to browse the web
 
-Since this file is a concatenation of the smaller files. Sure, this
-works, but I had to create the `all_data` file to do this. Thus, I
-have wasted a precious 10445 bytes of hard disk space. We can do this
-*without* creating a temporary file, but first I have to show you two
-more commands: `head` and `tail`. These commands print the first few,
-or last few, lines of a file, respectively. Try them out on
-`all_data`:
+Visit:
 
-    head all_data
-    tail all_data
+	ssh sshtron.zachlatta.com
 
-The `-n` option to either of these commands can be used to print the
-first or last `n` lines of a file. To print the first/last line of the
-file use:
+Then compete! Use WASD or HJKL (vim) to move the specific direction.
 
-    head -n 1 all_data
-    tail -n 1 all_data
+	telnet towel.blinkenlights.nl
 
-Let's turn back to the problem of printing only the total number of
-lines in a set of files without creating any temporary files. To do
-this, we want to tell the shell to take the output of the `wc Bert/*
-gerdal/*4*` and send it into the `tail -n 1` command. The `|`
-character (called pipe) is used for this purpose. Enter the following
-command:
+## One last thing to add
 
-    wc Bert/* gerdal/Data0559 | tail -n 1
+How to get your terminal to have fancy colours and other formatting when looking at files _and_ how to remove this should you want to not have people get all worked up because their screen doesn't look like yours and you don't want to go down that path because it is really a rabbit hole for another time... =)
 
-This will print only the total number of lines, characters, and words
-across all of these files. What is happening here? Well, `tail`, like
-many command line programs will read from the *standard input* when it
-is not given any files to operate on. In this case, it will just sit
-there waiting for input. That input can come from the user's keyboard
-*or from another program*. Try this:
+## One last thing to remember
 
-    tail -n 2
+Before we move to looking at version control and a programming language you'll likely find it useful to save a list of all the commands that you have used so far.  You can do this by navigating to a directory where you would like to save them and then running the *history* command with a redirect to a file.
 
-Notice that your cursor just sits there blinking. Tail is waiting for
-data to come in. Now type:
+	$ history > history_file.txt
 
-    French
-    fries
-    are
-    good
+Two other things to note about the history command:
 
-then CONTROL+d. You should see the lines:
+1. it can be combined with **grep** to find commands you have forgotten.
 
-    are
-    good
+	$ history | grep cat
 
-printed back at you. The CONTROL+d keyboard shortcut inserts an
-*end-of-file* character. It is sort of the standard way of telling the
-program "I'm done entering data". The `|` character is replaces the
-data from the keyboard with data from another command. You can string
-all sorts of commands together using the pipe.
+2. it is the history file that you are scrolling through when you press the up arrow on the commandline to avoid typing the same commands over and over.
 
-The philosophy behind these command line programs is that none of them
-really do anything all that impressive. BUT when you start chaining
-them together, you can do some really powerful things really
-efficiently. If you want to be proficient at using the shell, you must
-learn to become proficient with the pipe and redirection operators:
-`|`, `>`, `>>`.
-
-
-### A sorting example
-
-Let's create a file with some words to sort for the next example. We
-want to create a file which contains the following names:
-
-    Bob
-    Alice
-    Diane
-    Charles
-
-To do this, we need a program which allows us to create text
-files. There are many such programs, the easiest one which is
-installed on almost all systems is called `nano`. Navigate to `/tmp`
-and enter the following command:
-
-    nano toBeSorted
-
-(If you don't have nano, you can use another text editor or vi)
-Now enter the four names as shown above. When you are done, press
-CONTROL+O to write out the file. Press enter to use the file name
-`toBeSorted`. Then press CONTROL+x to exit `nano`.
-
-When you are back to the command line, enter the command:
-
-    sort toBeSorted
-
-Notice that the names are now printed in alphabetical order.
-
-* * * *
-**Short Exercise**
-
-Use the `echo` command and the append operator, `>>`, to append your
-name to the file, then sort it and make a new file called Sorted.
-
-* * * *
-
-Let's navigate back to `~/carpentry/data`. Enter the following command:
-
-    wc Bert/* | sort -k 3 -n
-
-We are already familiar with what the first of these two commands
-does: it creates a list containing the number of characters, words,
-and lines in each file in the `Bert` directory. This list is then
-piped into the `sort` command, so that it can be sorted. Notice there
-are two options given to sort:
-
-1.  `-k 3`: Sort based on the third column
-2.  `-n`: Sort in numerical order as opposed to alphabetical order
-
-Notice that the files are sorted by the number of characters.
-
-* * * *
-**Short Exercise**
-
-1. Combine the `wc`, `sort`, `head` and `tail` commands so that only the
-`wc` information for the largest file is listed
-
-Hint: To print the smallest file, use:
-
-    wc Bert/* | sort -k 3 -n | head -n 1
-
-* * * *
-
-Printing the smallest file seems pretty useful. We don't want to type
-out that long command often. Let's create a simple script, a simple
-program, to run this command. The program will look at all of the
-files in the current directory and print the information about the
-smallest one. Let's call the script `smallest`. We'll use `nano` to
-create this file. Navigate to the `data` directory, then:
-
-    nano smallest
-
-Then enter the following text:
-
-    #!/bin/bash
-    wc * | sort -k 3 -n | head -n 1
-
-Now, `cd` into the `Bert` directory and enter the command
-`../smallest`. Notice that it says permission denied. This happens
-because we haven't told the shell that this is an executable
-file. If you do `ls -l ../smallest`, it will show you the permissions on
-the left of the listing.
-
-Enter the following commands:
-
-    chmod a+x ../smallest
-    ../smallest
-
-The `chmod` command is used to modify the permissions of a file. This
-particular command modifies the file `../smallest` by giving all users
-(notice the `a`) permission to execute (notice the `x`) the file. If
-you enter:
-
-    ls -l ../smallest
-
-You will see that the file name is green and the permissions have changed.
-Congratulations, you just created your first shell script!
-
-# Searching files
-
-You can search the contents of a file using the command `grep`. The
-`grep` program is very powerful and useful especially when combined
-with other commands by using the pipe. Navigate to the `Bert`
-directory. Every data file in this directory has a line which says
-"Range". Lets list all of the ranges from the interviews that Bert
-conducted:
-
-    grep Range *
-
-* * * *
-**Short Exercise**
-
-Create an executable script called `smallestrange` in the `data`
-directory, that is similar to the `smallest` script, but prints the
-file containing the file with the smallest Range. Use the commands
-`grep`, `sort`, and `tail` to do this.
-
-* * * *
-
-
-
-
-
-# For Future Reference
-
-# Finding files
-
-The `find` program can be used to find files based on arbitrary
-criteria. Navigate to the `data` directory and enter the following
-command:
-
-    find . -print
-
-This prints the name of every file or directory, recursively, starting
-from the current directory. Let's exclude all of the directories:
-
-    find . -type f -print
-
-This tells `find` to locate only files. Now try these commands:
-
-    find . -type f -name "*1*"
-    find . -type f -name "*1*" -or -name "*2*" -print
-    find . -type f -name "*1*" -and -name "*2*" -print
-
-The `find` command can acquire a list of files and perform some
-operation on each file. Try this command out:
-
-    find . -type f -exec grep Volume {} \;
-
-This command finds every file starting from `.`. Then it searches each
-file for a line which contains the word "Volume". The `{}` refers to
-the name of each file. The trailing `\;` is used to terminate the
-command.  This command is slow, because it is calling a new instance
-of `grep` for each item the `find` returns.
-
-A faster way to do this is to use the `xargs` command:
-
-    find . -type f -print | xargs grep Volume
-
-`find` generates a list of all the files we are interested in,
-then we pipe them to `xargs`.  `xargs` takes the items given to it
-and passes them as arguments to `grep`.  `xargs` generally only creates
-a single instance of `grep` (or whatever program it is running).
-
-* * * *
-**Short Exercise**
-
-Navigate to the `data` directory. Use one `find` command to perform each
-of the operations listed below (except number 2, which does not
-require a `find` command):
-
-1.  Find any file whose name is "NOTES" within `data` and delete it
-
-2.  Create a new directory called `cleaneddata`
-
-3.  Move all of the files within `data` to the `cleaneddata` directory
-
-4.  Rename all of the files to ensure that they end in `.txt` (note:
-    it is ok for the file name to end in `.txt.txt`
-
-Hint: If you make a mistake and need to start over just do the
-following:
-
-1.  Navigate to the `shell` directory
-
-2.  Delete the `data` directory
-
-3.  Enter the command: `git checkout -- data` You should see that the
-    data directory has reappeared in its original state
-
-**BONUS**
-
-Redo exercise 4, except rename only the files which do not already end
-in `.txt`. You will have to use the `man` command to figure out how to
-search for files which do not match a certain name.
-
-* * * *
-
-## Where can I learn more about the shell?
-
-- Software Carpentry tutorial - [The Unix shell](http://software-carpentry.org/v4/shell/index.html)
-- The shell handout - [Command Reference](http://files.fosswire.com/2007/08/fwunixref.pdf)
-- [explainshell.com](http://explainshell.com)
-- http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html
-- man bash
-- Google - if you don't know how to do something, try Googling it. Other people
-have probably had the same question.
-- Learn by doing. There's no real other way to learn this than by trying it
-out.  Write your next paper in nano (really emacs or vi), open pdfs from
-the command line, automate something you don't really need to automate.
-
-## What are computational resources at MSU
-
-- The people who run this server
-- iCER and the High Performance Computing Cluster http://icer.msu.edu
-If you're doing work with a professor, you can get a free account and storage
-on the HPCC.  There are also people at iCER who will help get you started
-or answer questions.
-
-
-## Bonus:
-
-**backtick, xargs**: Example find all files with certain text
-
-**alias** -> rm -i
-
-**variables** -> use a path example
-
-**.bashrc**
-
-**du**
-
-**ln**
-
-**ssh and scp**
-
-**Regular Expressions**
-
-**Permissions**
-
-**Chaining commands together**

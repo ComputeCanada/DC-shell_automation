@@ -1,9 +1,0 @@
-#!/bin/bash
-
-word = the
-
-for i in $( ls ); do
-  echo The file $i
-  grep $word $i | wc -l
-
-done
