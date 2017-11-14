@@ -79,6 +79,14 @@ Mac OSX is built on top of a version of BSD (Berkeley Software Distribution), a 
 
 Regardless of the method used you will likely find it useful to drag the Terminal application icon to your Dock for easy access in the future.
 
+While OSX has a terminal the full power is not available by default and so we'll need to bring some of this in to make the most of this workshop.  To do this:
+
+1. Open a terminal window.
+2. Type `xcode-select --install` and then press Enter.
+3. From the pop-up window choose "Install"
+4. Wait for the Command Line Tools package download to complete, it’ll be about 130MB and installs fairly quickly depending on your connection speed.
+5. You're done.  If you'd like to check this then you can type `svn` into the terminal and you should see "Type 'svn help' for usage." as a response rather than a "command not found" error.
+
 ###Windows
 ---
 
@@ -89,7 +97,7 @@ To install Git for Windows go to the [Git for Windows homepage](https://git-for-
 
 ###GNU-Linux
 ---
-GNU-Linux, even versions with Graphical User Interfaces, is built on/around a shell environment so you will have one installed by default.  There are many variants of GNU-Linux so describing how to get to the shell is unlikely to be of much help.  Fortunately, most GNU-Linux users usually come to the workshop knowing how to access the shell on their system.  If this is not the case then just let someone who is part of the workshop know and they'll help you out.
+GNU-Linux, even versions with Graphical User Interfaces (GUIs), is built on/around a shell environment so you will have one installed by default.  There are many variants of GNU-Linux so describing how to get to the shell is unlikely to be of much help.  Fortunately, most GNU-Linux users usually come to the workshop knowing how to access the shell on their system.  If this is not the case then just let someone who is part of the workshop know and they'll help you out.
 
 Note that it is possible that your shell isn't BASH.  In somecases this won't matter and you can likely follow along since most of the commands we will look at today will be interchangeable across shells.  If this proves challenging then you can likely switch to BASH by typing `$ bash` at the command prompt (we'll explain this next). If you are unsure what shell you have you can type `$ echo $0` and you should see `-bash` as the result if you are using BASH.
 
@@ -193,9 +201,6 @@ Let's make the proper directory using underscores and move into that directory (
 Now we'll get the data that we need for the rest of this portion of the workshop by issuing the following command:
 
 	$ git clone https://github.com/ComputeCanada/DC-shell_automation  
-
-
-# xCode on MacOS
 
 (For this to work you need both a tool called git installed and a working internet connection on the computer you are using.  If it fails just let someone helping with the workshop know and we'll get you helped out.)
 
