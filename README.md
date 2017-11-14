@@ -56,7 +56,7 @@ In this portion of the workshop we're going to:
 
 ## Information on the shell
 
-shell cheat sheets:<br>
+Shell cheat sheets:<br>
 * [http://fosswire.com/post/2007/08/unixlinux-command-cheat-sheet/](http://fosswire.com/post/2007/08/unixlinux-command-cheat-sheet/)
 * [https://github.com/swcarpentry/boot-camps/blob/master/shell/shell_cheatsheet.md](https://github.com/swcarpentry/boot-camps/blob/master/shell/shell_cheatsheet.md)
 
@@ -81,9 +81,11 @@ Regardless of the method used you will likely find it useful to drag the Termina
 
 ###Windows
 ---
-Windows is its own operating system with its own development history and as a result it has something that _looks_ like BASH but that isn't, the Command Prompt.  So, we'll need to install a program that emulates BASH on Windows.  They're are more than a few options for this but we're going to recommend the [home, portable edition of MobaXterm](http://download.mobatek.net/10220170312132617/MobaXterm_Portable_v10.2.zip).  The portable edition installs everything in one folder, making it easy to find and easy to remove if you decide you don't like it.  We recommend installing it on your desktop so it is easy to find.
 
-MobaXterm has the ability to install software that we might need later and we will make use of this feature as the need arises.  One tool that we will need to install outside of the shell is Git (this is a version control tool but we will use it to make sure you have a copy of all the workshop content).  To install it go to the [MobaXterm Plugins Page](http://mobaxterm.mobatek.net/plugins.html) and download the git plugin.  This will put a file named "Git.mxt3" in your downloads folder.  Just drag and drop this file into the MobaXterm folder and you're done.
+
+Windows is its own operating system with its own development history and as a result it has something that _looks_ like BASH but that isn't, the Command Prompt.  So, we'll need to install a program that emulates BASH on Windows.  They're are more than a few options for this and we often recommend the [home, portable edition of MobaXterm](http://download.mobatek.net/10220170312132617/MobaXterm_Portable_v10.2.zip) (The portable edition installs everything in one folder, making it easy to find and easy to remove if you decide you don't like it.  We recommend installing it on your desktop so it is easy to find).  However, for this workshop [_Git for Windows_](https://git-for-windows.github.io/) is the better option because it saves some extra hoop jumping around installing Git _and_ we don't need any of the fancy features that tools like MobaXterm provide.
+
+To install Git for Windows go to the [Git for Windows homepage](https://git-for-windows.github.io/) and choose the download option.  Follow the install procedure, choosing the default options each time.
 
 ###GNU-Linux
 ---
@@ -117,7 +119,7 @@ Let's find out where we are:
 
 	$ whereami
 
-While it might seem like this would tell you where you are (within the directory structure of the system, not in the galaxy) it will fail with something like *whereami: command not found*.
+While it might seem like this would tell you where you are (within the directory structure of the system, not in the galaxy) it will fail with something like `whereami: command not found` (UNIX) or `INFO: Could not find files for the given pattern(s).` (GitBash).
 
 So, the command we actually need is:
 
@@ -191,6 +193,9 @@ Let's make the proper directory using underscores and move into that directory (
 Now we'll get the data that we need for the rest of this portion of the workshop by issuing the following command:
 
 	$ git clone https://github.com/ComputeCanada/DC-shell_automation  
+
+
+# xCode on MacOS
 
 (For this to work you need both a tool called git installed and a working internet connection on the computer you are using.  If it fails just let someone helping with the workshop know and we'll get you helped out.)
 
