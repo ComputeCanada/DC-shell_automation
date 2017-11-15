@@ -91,7 +91,7 @@ While OSX has a terminal the full power is not available by default and so we'll
 ---
 
 
-Windows is its own operating system with its own development history and as a result it has something that _looks_ like BASH but that isn't, the Command Prompt.  So, we'll need to install a program that emulates BASH on Windows.  They're are more than a few options for this and we often recommend the [home, portable edition of MobaXterm](http://download.mobatek.net/10220170312132617/MobaXterm_Portable_v10.2.zip) (The portable edition installs everything in one folder, making it easy to find and easy to remove if you decide you don't like it.  We recommend installing it on your desktop so it is easy to find).  However, for this workshop [_Git for Windows_](https://git-for-windows.github.io/) is the better option because it saves some extra hoop jumping around installing Git _and_ we don't need any of the fancy features that tools like MobaXterm provide.
+Windows is its own operating system with its own development history and as a result it has something that _looks_ like BASH but that isn't, the Command Prompt.  So, we'll need to install a program that emulates BASH on Windows.  They're are more than a few options for this and we often recommend the [home, portable edition of MobaXterm](http://download.mobatek.net/10220170312132617/MobaXterm_Portable_v10.2.zip) (The portable edition installs everything in one folder, making it easy to find and easy to remove if you decide you don't like it.  We recommend installing it on your desktop so it is easy to find).  _HOWEVER_, for this workshop [_Git for Windows_](https://git-for-windows.github.io/) is the better option because it saves some extra hoop jumping around installing Git _and_ we don't need any of the fancy features that tools like MobaXterm provide.
 
 To install Git for Windows go to the [Git for Windows homepage](https://git-for-windows.github.io/) and choose the download option.  Follow the install procedure, choosing the default options each time.
 
@@ -137,9 +137,10 @@ This stands for "Print Working Directory" and you'll get something that looks li
 
 --
 
-###SLIDE 1 & 2: Cathedral vs Bazaar / Linux Flavours
+###SLIDE 1, 2, & 3: Two things / Cathedral vs Bazaar / Linux Flavours
 Take a moment here to share a brief history of GNU-Linux.  Core points:
 
+1. Things to keep in mind
 1. How GNU-Linux Started (Richard Stallman)
 2. How it developed (Eric S. Raymond)
 3. Where it is now (Linux Flavours)
@@ -366,8 +367,8 @@ chances are that this looks terrible on your screen, making it a real challenge 
 `head` allows us to just look at the head of a file.  The optional `-n` flag followed by a number tells it how many lines to return.  Increasing the flag value to 2 will give us both the header *and* the first line, allowing us to see what we are working with without being overwhelmed.
 
 	$ head -n 2 EPLABB.csv 
-	Row ID,Branch ID,Branch Name,Number of Holds,Title,Author,As of Date,Web URL
-	EPLABB20150316Fifty shades of Grey / E.L. James,EPLABB,Abbottsfield - Penny McKee Branch,5,Fifty shades of Grey / E.L. James,James E L,03/16/2015 12:00:00 AM,http://epl.bibliocommons.com/search?t=smart&q=fifty%20shades%20of
+	Branch ID,Branch Name,Number of Holds,Title,Author,As of Date,Web URL
+	EPLABB,Abbottsfield - Penny McKee Branch,5,Fifty shades of Grey / E.L. James,James E L,03/16/2015 12:00:00 AM,http://epl.bibliocommons.com/search?t=smart&q=fifty%20shades%20of
 
 Our process from here is going to roughly be the following:
 
@@ -389,19 +390,17 @@ So, we can now have the file print on the screen without the header row.  The ne
 Let's start with an example.  Suppose that you wanted to check that using `+` with `tail` was inclusive and you wanted to avoid scrolling all the way to the top to check that the line just below the header was all that was returned.  You could do this by "piping" the tail command to the head command, as follows:
 
 	$ tail -n +1 EPLABB.csv | head -n 1
-	Row ID,Branch ID,Branch Name,Number of Holds,Title,Author,As of Date,Web URL
+	Branch ID,Branch Name,Number of Holds,Title,Author,As of Date,Web URL
 
 What we need to do is take the output of our `tail` command and pipe it to the `cut` tool.  Cut allows for lines in files to be sliced at a specified delimiting character into fields and then for the specified fields to be returned.  We know that we have a _comma_ separated values file and by looking at our header row we see that the title is the fifth item so we can issue the following command:
 	
-	$ tail -n +2 EPLABB.csv | cut -d , -f 5 
+	$ tail -n +2 EPLABB.csv | cut -d , -f 4 
 	Fifty shades of Grey / E.L. James
 	The back of the turtle : a novel / Thomas King
 	Minecraft annual / [edited by Jane Riordan ; written by Jane Riordan with 3 others]
-	Yes please / Amy Poehler
-	Crash & burn : a novel / Lisa Gardner
 	...
 
-That's pretty neat.  There is a problem though, some of the lines are not returning the title / author combo that we expect?
+That's pretty neat.  There is a problem though, some of the lines are not returning the title / author combo that we expect, such as `"Option B : facing adversity` and `"The lose your belly diet : change your gut`.
 
 > **Question:** What is happening here and why?
 > 
@@ -409,77 +408,67 @@ That's pretty neat.  There is a problem though, some of the lines are not return
 
 This is potentially a serious problem for us because we cannot count on a particular number of commas.  This is also good reason _not_ to choose a delimiter that appears elsewhere in the file.  There are two fairly straight forward ways around this:
 
-1. Use `csvtool` to recognize what commas are delimiters and which are part of the content of a field.
-2. Use the setup of the file to our advantage.
+1. Use `csvtool` to recognize what commas are delimiters and which are part of the content of a field (csvtool recognizes that commas inside of quotation marks are _not_ delimiters).
+2. Use the setup of the file and the features of `cut` to our advantage.
 
 While #1 would be nice we can't really pursue it here because of all the MacOS users in the room.  Why is this a problem?  As mentioned earlier, MacOS is based on a variant of BSD, a variant that is locked down such that it is not at all straightforward to install new GNU-Linux tools on the system.  Since we're going for cross-platform as much as possible we're going to need to find another way.
 
-> **Question:** Where else does the title appear and how might we use `cut` to get it?
+> **Question:** Where else does the title appear and how might we use `cut` to get it? (Hint: we might need to use `cut` 2x...)
 > 
-> **Answer** In the Row ID and we can cut at the `/` if we are willing to lose the author and keep some junk for the time being.
+> **Answer** We can use cut to get us everything from the fourth field on and then use it again to cut at the `/` if we are willing to lose the author.
 
 Let's do this:
 
-	$ tail -n +2 EPLABB.csv | cut -d / -f 1 
-	EPLABB20150316Fifty shades of Grey 
-	EPLABB20150316The back of the turtle : a novel 
-	EPLABB20150316Minecraft annual
+	$ tail -n +2 EPLABB.csv | cut -d , -f 4- | cut -d / -f 1 
+	Fifty shades of Grey 
+	The back of the turtle : a novel 
+	Minecraft annual
+	...
+	"The lose your belly diet : change your gut, change your life
+	...
+	"Option B : facing adversity, building resilience, and finding joy
+	
 
-So, we're moving along, we just really need to get rid of the coding information before the title.  To do this we need to pass our current output to another tool, one that is able to read lines and make replacements/removals of text based on patterns.  The tool that can do this is `sed`, the **S**tream **ED**itor.
+So, we're moving along, we just really need to get rid of quotations before some of the titles.  To do this we need to pass our current output to another tool, one that is able to read lines and make replacements/removals of text based on patterns.  The tool that can do this is `sed`, the **S**tream **ED**itor.
 
 For our purposes `sed` has a special format that looks like this:
 
 	sed 's/what_to_find/what_to_replace_with/'
 
-What we want to do is remove the "EPL..." content completely so we can just leave the second item empty by removing it completely:
+What we want to do is remove the `"` content completely so we can just leave the second item empty by removing it completely:
 
 	sed 's/what_to_find//'
 
 This leaves us with the problem of what to find.  Here `sed` is expecting a regular expression, which is a way of declaring patterns of text.  Let's start with a simple one "EPLABB" and add `sed` to our pipeline:
 
-	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/EPLABB//'
-
-Now all the "EPLABB" content is gone.  If we could just add the double quotation marks and the numbers to this removal we'd have what we want.  Let's deal with these in order.  Try just adding a double quotation before the "E":
-
-	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"EPLABB//'
-
-The problem with the double quotation marks is that they do not appear on every line and currently our pattern of text must match exactly.  We can fix this by introducing a quantifier, a character that tells the regular expression engine to match a varying number of a character.  In this case we want to say "zero or more" and we do this with an `*` like so
-
-	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB//'
-	
-Here the `*` says match the preceeding character (a `"`) zero or more times.  Nice.
-
-Next we need to get rid of the date information.  Here we will make use of ranges and a different quantifier.  The regular expression engine understands `[0-9]` to be a stand-in for the numerals 0, 1, 2, 3, up to 9.  We can add it to our regular expression and see that it will indeed allow us to remove the first digit.
-
-	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB[0-9]//'
-
-There are always eight numerals so we could just repeat `[0-9]` eight times but there is a more concise way.  Instead of writing it out eight times we use a quantifier to tell the regular expression engine exactly how many matches to make.  This looks like `{n}` where `n` is the number of matches to make.  As with the `*` we add this _after_ the character set we wish to quantify:
-
-	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB[0-9]{8}//'
-	EPLABB20150316Fifty shades of Grey 
-	EPLABB20150316The back of the turtle : a novel 
-
-Wait!  How'd we lose our progress?  The problem here is that in the shell curly braces are special characters and we need to tell the shell to just treat them like any other character.  We do this by placing a single `\` in front of each.
-
-	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB[0-9]\{8\}//'
+	$ tail -n +2 EPLABB.csv | cut -d , -f 4- | cut -d / -f 1 | sed 's/"//'
 
 We now have all the titles.  Nice.
 
 Our next task is to count them.  To do this we must first sort them.  It should be little surprise that  `sort` is a command that we can easily add to our pipeline:
 
-	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB[0-9]\{8\}//' | sort
+	$ tail -n +2 EPLABB.csv | cut -d , -f 4- | cut -d / -f 1 | sed 's/"//' | sort
 	
 We'll now lean on a command called `uniq` (short for "unique") to remove all the duplicate entries.  More than this though we'll pass it the `-c` flag so that it will _count_ the number of entries.
 
-	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB[0-9]\{8\}//' | sort | uniq -c
+	$ tail -n +2 EPLABB.csv | cut -d , -f 4- | cut -d / -f 1 | sed 's/"//' | sort | uniq -c
 
 One last sort, this one with the `-r` flag to reverse the results so the larger number is at the top, and we're done.
 
-	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB[0-9]\{8\}//' | sort | uniq -c | sort -r
+	$ tail -n +2 EPLABB.csv | cut -d , -f 4- | cut -d / -f 1 | sed 's/"//' | sort | uniq -c | sort -r
 
 Of course, if you'd like to specify how many lines to print then you can pipe the result to `head` with the `-n` flag on.
 
-	$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB[0-9]\{8\}//' | sort | uniq -c | sort -r | head -n 10
+	$ tail -n +2 EPLABB.csv | cut -d , -f 4- | cut -d / -f 1 | sed 's/"//' | sort | uniq -c | sort -r | head -n 10
+	
+	
+<!-- 
+
+If you are using the EPL data _without_ the RowID removed then the final solution is:
+
+$ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB[0-9]\{8\}//' | sort | uniq -c | sort -r | head -n 10
+
+-->
 
 ## Automating
 
@@ -487,7 +476,15 @@ So, we've built a pipeline for EPLABB but what about the other branches?  How ca
 
 ### Creating Files
 
-We are now going to make a file.  It is important for the participants to note that what matters here is that *they can create a text file* not what tool they use to make that text file.  We will use **nano** because it is simple, has the instructions listed on the bottom of the screen, and keeps us in the terminal window (which is convenient, that's all), *beyond these reasons there is nothing special about nano*.  What matters is that the tool they choose is a **TEXT EDITOR** and that they can use it.  If they want to use another terminal program (like vim or emacs) or a GUI tool (like TextWrangler, Sublime, or Notepad++) that's just fine.  They need to know that they cannot use tools like Word or LibreOffice because they hide other content even though they look like plain text.
+We are now going to make a file.  It is important for the participants to note that what matters here is that *they can create a text file* not what tool they use to make that text file.  
+
+There are many options for text editors.  We'll use one called `vim` because it is available on all different platforms that people might bring to a Carpentry workshop.  It is a powerful editor because of all the options available.  We'll only look at a few options.  Keep the following in mind when using `vim`:
+
+* `vim` has two modes: INSERT and COMMAND.  Insert is used for writing and editing text.  Command is used for moving around, searching, saving, etc.  You will start in the command mode.  You can enter the insert mode by pressing `:` followed by an `i` (often writen at `:i`).  You can get back into command mode by pressing `ESC`.
+* Files can be saved from command mode with `:x`.  If the file has not yet been named or you would like to change the name then add a space and the name you would like to give the file.  For example `:x myNewFile.txt`.
+
+<!--
+We will use **nano** because it is simple, has the instructions listed on the bottom of the screen, and keeps us in the terminal window (which is convenient, that's all), *beyond these reasons there is nothing special about nano*.  What matters is that the tool they choose is a **TEXT EDITOR** and that they can use it.  If they want to use another terminal program (like vim or emacs) or a GUI tool (like TextWrangler, Sublime, or Notepad++) that's just fine.  They need to know that they cannot use tools like Word or LibreOffice because they hide other content even though they look like plain text.
 
 > If people are using MobaXterm or some other shell that doesn't have nano installed by default then they can likely get it with one of the following commands:
 > 
@@ -498,12 +495,14 @@ We are now going to make a file.  It is important for the participants to note t
 > `$ yum install nano`
 > 
 > apt-get and yum are package management tools that are likely installed already that can be used to install other software, in this case the text editor Nano.
+-->
 
 **Before we move on copy our current pipeline to your clipboard to save you typing it out from memory.**
 
 We will run nano by issuing the command followed by the name of the file we would like to create/edit.
 
-	$ nano top10.sh
+	$ vim top10.sh
+<!--	$ nano top10.sh 
 
 This opens the nano program and allows the declared file to be edited/created.  Nano is text-only, there is no fancy formatting.  The available commands are on the bottom of the screen.  The "^" means "hold the control key and then press the key to the right".
 
@@ -513,6 +512,8 @@ Exit and save your work by:
 
 	^x		(hold control and press 'x')
 	y		(to respond "yes" when they are asked if they want to save the file)
+
+-->
 
 Check that the file is in the folder:
 
@@ -524,11 +525,11 @@ To view the content of the file we could run `nano` again or just use `cat`.  Wh
 	
 The point with making this script though was to have it work for _any_ of the EPL branch files.  Now that we hawe it working for the first one let's generalize it.  Open it back up:
 
-	$ nano top10.sh
+	$ vim top10.sh
 	
 Once inside change the pipeline to the following:
 
-	tail -n +2 "$1" | cut -d / -f 1 | sed 's/"*EPLABB[0-9]\{8\}//' | sort | uniq -c | sort -r | head -n 10
+	tail -n +2 "$1" | cut -d , -f 4- | cut -d / -f 1 | sed 's/"//' | sort | uniq -c | sort -r | head -n 10
 
 When this script is run the `"$1"` tells the shell to grab the first item following the name of the script on the command line and substitute that value for the `"$1"`.  Once you save and exit nana you can now repeat what we've already done via:
 
@@ -536,9 +537,9 @@ When this script is run the `"$1"` tells the shell to grab the first item follow
 	
 And substitue any of the other branch CSVs as well.
 
-> **Optional:** Add `#!\bin\bash` to the top of the file, use `chmod +x` to make the file executable, and explain the `./` syntax to run this as a "full" script.
+> **Optional:** Add `#!\bin\bash` to the top of the file, use `chmod +x top10.sh` to make the file executable, and explain the `./` syntax to run this as a "full" script.
 
-> **To Be Added:** Using `*` and `cat` to pull together all the EPL branch files into one big file for future processing.
+> **To Be Added:** Using `cat` and `*` to pull together all the EPL branch files into one big file for future processing.
 
 ### Cleaning Up
 
