@@ -464,7 +464,7 @@ Of course, if you'd like to specify how many lines to print then you can pipe th
 	
 <!-- 
 
-If you are using the EPL data _without_ the RowID removed then the final solution is:
+If you are using the EPL data _without_ the RowID removed (the 2017-07-12-ualberta-DC dataset) then the final solution is:
 
 $ tail -n +2 EPLABB.csv | cut -d / -f 1 | sed 's/"*EPLABB[0-9]\{8\}//' | sort | uniq -c | sort -r | head -n 10
 
@@ -545,7 +545,7 @@ And substitue any of the other branch CSVs as well.
 
 ##### ACHTUNG: We are now at the point where you will learn commands that can seriously damage your system.  _Be very sure that you understand what you are doing before you do it._
 
-We are done with the basics of the command line and about to move on to some "real world" examples and writing our own script.  Before we get to this though we should do some quick clean-up.  Specifically, we have some junk folders that we made "by accident", some files that it would be nice put together in a "trash" folder, and some files that would benefit from a ".txt" extension.
+Before we leave the command line behind we should know how to do some quick clean-up.  Specifically, we have some junk folders that we made "by accident", some files that it would be nice put together in a "trash" folder, and some files that would benefit from a ".txt" extension.
 
 Let's start by getting rid of the folders on the Desktop that we don't need.  Let's see what is here:
 
