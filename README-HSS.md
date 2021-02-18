@@ -259,7 +259,7 @@ Method for shortening the URL *AND* keeping the .tar.gz or .zip parts of it is f
 
 curl https://git.io/ -i -F "url=https://github.com/YOUR_GITHUB_URL" -F "code=YOUR_CUSTOM_NAME"
 
-curl https://git.io/ -i -F "url=https://github.com/ComputeCanada/DC-shell_automation/raw/master/DC-shell_automation.zip" -F "code=CCF-HSS-SHELL.zip"
+curl https://git.io/ -i -F "url=https://github.com/ComputeCanada/DC-shell_automation/blob/master/CCF-HSS-SHELL.zip" -F "code=CCF-HSS-SHELL.zip"
 
 -->
 
