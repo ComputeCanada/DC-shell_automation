@@ -1,12 +1,5 @@
 Modified from content [HERE](https://github.com/datacarpentry/2015-05-30-HASTAC/blob/gh-pages/shell-intro/README.md), [HERE](https://github.com/datacarpentry/2015-05-30-HASTAC/blob/gh-pages/shell-libcatalogue/report-data.md), and [HERE](https://github.com/ComputeCanada/2017-05-15-ualberta/blob/gh-pages/__CommandLineResources/CommandLineWalkThrough.md) with thanks to the earlier contributors Cam Macdonell, Tracy Teal, Greg Wilson, Dennis Tennen, Paul Wilson, Milad Fatenejad, Sasha Wood, and Radhika Khetani.
 
-<!--
-To add...
-
-1. Build slides for the challenge/comprehension questions
-2. Add aside about existence and use of `find`
--->
-
 
 # \*nix Walkthrough
 
@@ -239,6 +232,24 @@ The other shortcut to note is the `/`.  This is the shortcut to the "root direct
 
 >**Comprehension Check:** Go to the root directory and use one of the methods covered about to get back to the home directory.  Go to the root directory a second time and use a different method to get back to the home directory.
 
+> **Comprehension Test:**
+For a hypothetical filesystem location of **/home/amanda/data/**, select each of the below commands that Amanda could use to navigate to her home directory, which is **/home/amanda**
+
+> 1. cd .
+> 2. cd /
+> 3. cd /home/amanda
+> 4. cd ../..
+> 5. cd ~
+> 6. cd home
+> 7. cd ~/data/..
+> 8. cd
+> 9. cd ..
+
+> **Answer:** 3, 5, 8, 9
+
+>**QUESTION:** If someone is in /Users/nelle/ then how do they get to /Users/larry/ using cd and a relative address?
+>
+>**ANSWER:** `cd ../larry`
 
 > If **scrolling through the history** with the arrow keys has not come up yet then this is a good time to prompt it.
 
@@ -259,11 +270,44 @@ Method for shortening the URL *AND* keeping the .tar.gz or .zip parts of it is f
 
 curl https://git.io/ -i -F "url=https://github.com/YOUR_GITHUB_URL" -F "code=YOUR_CUSTOM_NAME"
 
-curl https://git.io/ -i -F "url=https://github.com/ComputeCanada/DC-shell_automation/blob/master/CCF-HSS-SHELL.zip" -F "code=CCF-HSS-SHELL.zip"
+curl https://git.io/ -i -F "url=https://github.com/ComputeCanada/DC-shell_automation/raw/master/CCF-HSS-SHELL.zip" -F "code=CCF_HSS_SHELL.zip"
 
 -->
 
-	$cd DC-shell_automation
+For the rest of this workshop to work we need to grab some data from the web.  There are many tools and methods to do this.  We'll use a tool called `wget`.  Think of it as the "Web Get" command.
+
+	$ wget https://git.io/CCF_HSS_SHELL.zip
+	
+	--2021-02-18 05:45:50--  https://git.io/CCF_HSS_SHELL.zip
+	Resolving git.io (git.io)... 3.213.223.141, 3.229.59.32, 52.203.100.2, ...
+	Connecting to git.io (git.io)|3.213.223.141|:443... connected.
+	HTTP request sent, awaiting response... 302 Found
+	Location: https://github.com/ComputeCanada/DC-shell_automation/raw/master/CCF-HSS-SHELL.zip [following]
+	--2021-02-18 05:45:50--  https://github.com/ComputeCanada/DC-shell_automation/raw/master/CCF-HSS-SHELL.zip
+	Resolving github.com (github.com)... 140.82.113.3
+	Connecting to github.com (github.com)|140.82.113.3|:443... connected.
+	HTTP request sent, awaiting response... 302 Found
+	Location: https://raw.githubusercontent.com/ComputeCanada/DC-shell_automation/master/CCF-HSS-SHELL.zip [following]
+	--2021-02-18 05:45:50--  https://raw.githubusercontent.com/ComputeCanada/DC-shell_automation/master/CCF-HSS-SHELL.zip
+	Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.111.133, 185.199.108.133, 185.199.110.133, ...
+	Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.111.133|:443... connected.
+	HTTP request sent, awaiting response... 200 OK
+	Length: 1119213 (1.1M) [application/zip]
+	Saving to: ‘CCF_HSS_SHELL.zip’
+	
+	CCF_HSS_SHELL.zip                             100%[==============================================================================================>]   1.07M  --.-KB/s    in 0.04s   
+	
+	2021-02-18 05:45:50 (28.4 MB/s) - ‘CCF_HSS_SHELL.zip’ saved [1119213/1119213]
+
+There is a lot of output here.  Most of it is connection information.  What we care about is that the last few lines seem to indicate that the file was successfully downloaded.
+
+>**Comprehension Check:** How do we check that the file really was downloaded?
+
+> 	$ ls
+
+Added to our current directory is PDF file and a directory called LibraryData.  The PDF is a write-up of the walkthrough that we are following for this workshop.  Don't worry, you'll get this on your local computer at the end of the workshop.  The directory holds the data that we'll be using for the rest of the workshop.  Let's go into it and have a look.
+
+	$cd LibraryData
 	
 > If **tab completion** has not come up by now then this is the time to introduce it.
 
@@ -283,76 +327,37 @@ These new options are called "flags" and adding them to the command turns on (or
 
 There are often a lot of flags available for each command.  To see what they are for each command you have two options:
 
-1. Use the "man" pages if they are available.
+1. Search on the Internet.  
+
+2. Use the "man" pages if they are available.  Back in the day though you were in luck if you had a book or a knowledgeable friend.  Without those you'd need to resort to the manual pages that were included with every program that was part of the shell.  These can be accessed with the `man` command.  
 
 		$ man ls
 
-2. Search on the Internet.  This will be the case for those using MobaXterm (sorry these are not installed by default and installing them is beyond the scope of this workshop). 
+When inside the manual program `h` will get you a help screen that you can use the arrow keys to scroll around and `q` will quit, putting you back at the prompt.
 
 
->**Question:** What will `$ ls -al` do?
+>**Comprehension Check:** What will `$ ls -al` do?
 
 >**Answer:** List all the files in a long format.
 
 >Look at the output and point out the files **./** and **../**.  Point out that the single dot is a self reference to this directory and that the double dot is a reference to the directory above this one.
  
 
->**Question:** What does *ls ..* do?
+>**Comprehension Check:** What does `$ ls ..` do?
 
 >**Answer:** Show the contents of the directory above the current one.
+
+>**Comprehension Check:** What flag or flags should be used with `ls` to print the file size in a human readable format?
+
+>**Answer:** `ls -lh`
+
 
 At this point they are ready to recognize the basic command structure:
 
 	**command** *space* **flags** *space* **list of files separated by spaces**
 
-Have them look in the root directory with:
-
-	$ ls /
-
---
-###Slide 3: Discovering Flag Properties
-
->**Comprehension Test:** What do the flags -s, -h, and -r do when combined with the ls command?
-
->**Answer:** They can look these up using **man ls** or just try them out.
-
---
-
-Remember `man -k search_word` for finding `man` commands.  You may need to be creative with the terms you use.
-
-
---
-###Slide 4: Going Home
-
-> **Comprehension Test:**
-For a hypothetical filesystem location of **/home/amanda/data/**, select each of the below commands that Amanda could use to navigate to her home directory, which is **/home/amanda**
-
-> 1. cd .
-> 2. cd /
-> 3. cd /home/amanda
-> 4. cd ../..
-> 5. cd ~
-> 6. cd home
-> 7. cd ~/data/..
-> 8. cd
-> 9. cd ..
-
-> **Answer:** 3, 5, 8, 9
-
---
-
-###Slide 5: Translation 1
->**QUESTION:** If someone is in /Users/nelle/ then how do they get to /Users/larry/ using cd and a relative address?
->
->**ANSWER:** `cd ../larry`
-
---
-
->**EXERCISE:** A treasure hunt.  Find the file named "youfoundit.txt" located somewhere within the hidden folder in the content that we pulled down from GitHub using the GitClone command 
-
 
 ## Working with Data
-
 
 Consider the following data as an example of a spreadsheet that a librarian may find themself working with.
 
@@ -393,10 +398,9 @@ We can look into them individually by using the concatenate command on the first
 >**Question:** What will the *-n* flag do when run with **cat**?
 
 >**Answer:** Prints the line numbers for each line in each file.
->
->Note that it appears that the -n flag does not funciton with MobaXterm.
 
-Chances are that this looks terrible on your screen, making it a real challenge to see what's there.  Instead of `cat` we can use a special command just for looking at the top of files:
+
+Chances are that this will overflow your screen, making it a real challenge to see what's inside.  Instead of `cat` we can use a special command just for looking at the top of files:
 
 	$ head -n EPLABB.csv
 	Branch ID,Branch Name,Number of Holds,Title,Author,As of Date,Web URL
@@ -566,6 +570,10 @@ This opens the nano program and allows the declared file to be edited/created.  
 
 Into this file we are going to paste the pipeline.  Above this add a line that starts with a `#` and follow it with an explanation about what this pipeline does.
 
+	# reads the EPLABB top ten counts and outputs the top ten top ten books 
+
+	tail -n +2 EPLABB.csv | cut -d , -f 4- | cut -d / -f 1 | sed 's/"//' | sort | uniq -c | sort -nr | head -n 10
+
 Exit and save your work by:
 
 	^x		(hold control and press 'x')
@@ -586,7 +594,7 @@ The point with making this script though was to have it work for _any_ of the EP
 	
 Once inside change the pipeline to the following:
 
-	tail -n +2 $1 | cut -d , -f 4- | cut -d / -f 1 | sed 's/"//' | sort | uniq -c | sort -r | head -n 10
+	tail -n +2 $1 | cut -d , -f 4- | cut -d / -f 1 | sed 's/"//' | sort | uniq -c | sort -nr | head -n 10
 
 When this script is run the `$1` tells the shell to grab the first item following the name of the script on the command line and substitute that value for the `$1`.  Once you save and exit nana you can now repeat what we've already done via:
 
@@ -596,165 +604,45 @@ And substitue any of the other branch CSVs as well.
 
 > **Optional:** Add `#!\bin\bash` to the top of the file, use `chmod +x top10.sh` to make the file executable, and explain the `./` syntax to run this as a "full" script.
 
-> **To Be Added:** Using `cat` and `*` to pull together all the EPL branch files into one big file for future processing.
+<!-- > **To Be Added:** Using `cat` and `*` to pull together all the EPL branch files into one big file for future processing. -->
 
-### Cleaning Up
+## Saving History, Zipping, and Getting Your Files Home
 
-##### ACHTUNG: We are now at the point where you will learn commands that can seriously damage your system.  _Be very sure that you understand what you are doing before you do it._
+### One last thing to remember
 
-Before we leave the command line behind we should know how to do some quick clean-up.  Specifically, we have some junk folders that we made "by accident", some files that it would be nice put together in a "trash" folder, and some files that would benefit from a ".txt" extension.
+Let's start by going back to our home directory
 
-Let's start by getting rid of the folders on the Desktop that we don't need.  Let's see what is here:
+	$ cd
+	
+At this point you'll likely be feeling a little overwhelmed.  What were all those commands that were run?  How can I keep a record of what was done?  It shouldn't be too surprising at this point that there is a command for that! `history` (It is the history file that you are scrolling through when you press the up arrow on the commandline to avoid typing the same commands over and over.)
 
-	$ ls ..
-
-Which should show us something like:
-
+	$ history
+	1  ls
+	2  ls projects
+	3  ls scratch
+	4  ls
 	...
-	Code
-	Command
-	Line
-	Command_Line
+	
+	
+You can save the history to a file by making use of a second redirect (the `|` was the first).  This new redirect is the `>` and it takes the output of what is on the left side of it and writes that output to the file named on the right side of it.
+
+	$ history > history.txt
+
+Once we have this file we're ready to make a zip file of everything we've done to facilitate easy transfer back to our desktop.  There's a few files we want.  Note the use of the `-r` flag to *recursively* capture the content in `LibraryData/`.
+	
+	$ zip HSSWorkshop.zip history.txt HSSShell.pdf LibraryData/
 	...
-
-We want to remove the three accidental folders.  We can do this using the `rm` command, which _removes_ files from the system.  Let's start by testing this with a new junk file:
-
-	$ touch junkFile
 	
-`touch` is the command used to change the modification and access times associated with a file.  Like `cat` it is overloaded.  In this case the overloading creates a file with no content if the file does not already exist and no other parameters are given.  Use `cat` to look inside and `ls -l` to confirm that this is the case.
+With the zip complete we can close the connection to the remote host.
 
-Once you have confirmed that the file is there let's remove it and then check that it is gone:
-
-	$ rm junkFile
-	$ ls
+	$ exit
+	logout
+	Connection to ccf-hss.c3.ca closed.
 	
-##### There is _no_ recycle bin on the command line.  Once you "rm" something it is truly gone (except for the possibility of some very advanced forensics).
+Note that your prompt has changed, flagging to you that you are now issuing commands on your local system.
 
-Let's try and remove `Line/` (We'll save `Command` and `Code` for a little trick):
+The very last thing for us to do is to grab the zip file from the remote system.  We'll use the Secure CoPy command for this.  Note the similarity to the `ssh` command in terms of the syntax and recall that when entering the password you won't see your keystrokes.  Also note the use of the `~` to tell the command to put the file in your current directory
 
-	$ rm Line
-
-Running this command gives us a warning though and will not complete.  We are told that these are directories.  Directories are just files at their core but they are special files that hold/point to other files and so we cannot simply delete them without deleting their contents.
-
->**Question:** How do we see what files are in these directories that we cannot delete?
->
->**Answer:** `ls -a`
-
-What is holding us back are the . and .. files.  If you try to delete them you will be told: `"." and ".." may not be removed` (Think about sitting at the end of a tree branch and cutting it off).  What we need is a special flag to use with the `rm` command.  That flag is `-r` which is the "recursive" flag, telling the command to enter a directory and remove everything inside it, all the way to the bottom.  Let's try it
-
-	$ rm -r Line
-	$ ls
-
-And it is gone.
-
-Note that like `cat` we can pass multiple files at the same time to `rm` and it will delete each one.  If you have a lot of files to delete the this can still be tedious.  Fortunately there is a wild card character.  Let's test it with some junk files:
-
-	$ touch junk1 junk2 junk3
-	$ ls
-	$ rm junk*
-	$ ls
-	
-Nice.  Now let's remove `Command/` and `Code/`:
-
-	$ rm Co*
-
-##### Only _think_ about the next question.  Do not figure it out by running it.
-
---
-### Slide7: A serious mistake
->**Question:** _Without running this command_, what would happen if the command issued was `$ rm -rf /`?
-
->**Answer:** *Everything* goes since you are telling the computer to *recursively* remove everything in the root folder.  For some "real-world" consequences see [this unfortunate forum post](http://serverfault.com/questions/587102/monday-morning-mistake-sudo-rm-rf-no-preserve-root).  It is possible that you will have some permission or other security mechanisms in place to prevent this but if you are a full administrator it can be done.
->
-
---
-###Slide 8: Make me a sandwich
->Often you will be prevented from doing dangerous things---like deleting crucially important files---because you are just a regular user and not logged in as the *super user*.  It is possible to become the super user on most systems by entering the command **sudo** in front of any other command.  For those working as system administrators on UNIX-like systems a common workflow is the following:
-
-	$ tell the computer to do X
-	computer says "No, you don't have permission"
-	$ sudo tell the computer to do X
-	the computer does it (after the right password is entered)
-	
-> You can try sudo with _any_ command to see how it works.  Let's try it with `ls`
-	
-	$ sudo ls
-	Password:
-	<list of directory contents>
-
-> [XKCD](https://xkcd.com/149/) has a nice little web comic to bring home how `sudo` is used.
+	$ scp user001@ccf-hss.c3.ca:HSSWorkshop.zip ~
 
 
-## Some Fun
-
-On any Debian based system (Ubuntu), try "apt-get moo".
-If you have aptitude installed try, in sequence:
-	
-	aptitude moo
-	aptitude -v moo
-	aptitude -vv moo
-	aptitude -vvv moo
-	aptitude -vvvv moo
-
-play NetHack on line at [https://alt.org/nethack/]()
-
-The command `rev` which is part of the util-linux package reverses any text you feed to it:
-
-	fortune | rev
-	.retteb hcum ,hcum ylno ... won thgir era uoy erehw ekil yltcaxe si esidaraPnosrednA eiruaL --
-
-Install `links` or `lynx` to browse the web
-
-Visit:
-
-	ssh sshtron.zachlatta.com
-
-Then compete! Use WASD or HJKL (vim) to move the specific direction.
-
-	telnet towel.blinkenlights.nl
-
-## One last thing to add
-
-How to get your terminal to have fancy colours and other formatting when looking at files _and_ how to remove this should you want to not have people get all worked up because their screen doesn't look like yours and you don't want to go down that path because it is really a rabbit hole for another time... =)
-
-## One last thing to remember
-
-Before we move to looking at version control and a programming language you'll likely find it useful to save a list of all the commands that you have used so far.  You can do this by navigating to a directory where you would like to save them and then running the *history* command with a redirect to a file.
-
-	$ history > history_file.txt
-
-Two other things to note about the history command:
-
-1. it can be combined with **grep** to find commands you have forgotten.
-
-	$ history | grep cat
-
-2. it is the history file that you are scrolling through when you press the up arrow on the commandline to avoid typing the same commands over and over.
-
-
-
-
-We are going to create a directory to hold the files that we will be working with.  We are going to do this in the Desktop directory because it will be very easy to see the consequences of what you do here.
-
-	$ mkdir Shell Workshop
-
-Double check that the folder is ther by using `ls` too.  Wait... Folder_s_!?!  What happened?
-
-The **ls** command will show that we have made a mistake: there are *two* directories---one called "Data" and another called "Carpentry"---rather than one "Shell Workshop" directory.  This highlights two important things to remember:
-
-1. The computer does what you tell it, not necessarily what you wanted.
-2. Spaces matter on the command line, they are punctuation.
-
-We can fix the first by being patient and careful.  We can fix the second by:
-
-1. Not using spaces via:
-	1. Camel Case
-	2. Dashes
-	3. Underscores
-2. Escaping the space by preceding it with a "\".
-3. Wrapping content with spaces in double quotes.
-
-Let's make the proper directory using underscores and move into that directory (We'll come back to clean up the extra folders later):
-
-	$ mkdir Data_Carpentry
-	$ cd Data_Carpentry
