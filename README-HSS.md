@@ -270,40 +270,44 @@ Method for shortening the URL *AND* keeping the .tar.gz or .zip parts of it is f
 
 curl https://git.io/ -i -F "url=https://github.com/YOUR_GITHUB_URL" -F "code=YOUR_CUSTOM_NAME"
 
-curl https://git.io/ -i -F "url=https://github.com/ComputeCanada/DC-shell_automation/raw/master/CCF-HSS-SHELL.zip" -F "code=CCF_HSS_SHELL.zip"
+curl https://git.io/ -i -F "url=https://github.com/ComputeCanada/DC-shell_automation/raw/master/HSS-SHELL.zip" -F "code=HSS-SHELL.zip"
 
 -->
 
 For the rest of this workshop to work we need to grab some data from the web.  There are many tools and methods to do this.  We'll use a tool called `wget`.  Think of it as the "Web Get" command.
 
-	$ wget https://git.io/CCF_HSS_SHELL.zip
+	$ wget https://git.io/HSS-SHELL.zip
 	
-	--2021-02-18 05:45:50--  https://git.io/CCF_HSS_SHELL.zip
+	--2021-02-18 05:45:50--  https://git.io/HSS-SHELL.zip
 	Resolving git.io (git.io)... 3.213.223.141, 3.229.59.32, 52.203.100.2, ...
 	Connecting to git.io (git.io)|3.213.223.141|:443... connected.
 	HTTP request sent, awaiting response... 302 Found
-	Location: https://github.com/ComputeCanada/DC-shell_automation/raw/master/CCF-HSS-SHELL.zip [following]
-	--2021-02-18 05:45:50--  https://github.com/ComputeCanada/DC-shell_automation/raw/master/CCF-HSS-SHELL.zip
+	Location: https://github.com/ComputeCanada/DC-shell_automation/raw/master/HSS-SHELL.zip [following]
+	--2021-02-18 05:45:50--  https://github.com/ComputeCanada/DC-shell_automation/raw/master/HSS-SHELL.zip
 	Resolving github.com (github.com)... 140.82.113.3
 	Connecting to github.com (github.com)|140.82.113.3|:443... connected.
 	HTTP request sent, awaiting response... 302 Found
-	Location: https://raw.githubusercontent.com/ComputeCanada/DC-shell_automation/master/CCF-HSS-SHELL.zip [following]
-	--2021-02-18 05:45:50--  https://raw.githubusercontent.com/ComputeCanada/DC-shell_automation/master/CCF-HSS-SHELL.zip
+	Location: https://raw.githubusercontent.com/ComputeCanada/DC-shell_automation/master/HSS-SHELL.zip [following]
+	--2021-02-18 05:45:50--  https://raw.githubusercontent.com/ComputeCanada/DC-shell_automation/master/HSS-SHELL.zip
 	Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.111.133, 185.199.108.133, 185.199.110.133, ...
 	Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.111.133|:443... connected.
 	HTTP request sent, awaiting response... 200 OK
 	Length: 1119213 (1.1M) [application/zip]
-	Saving to: ‘CCF_HSS_SHELL.zip’
+	Saving to: ‘HSS-SHELL.zip’
 	
-	CCF_HSS_SHELL.zip                             100%[==============================================================================================>]   1.07M  --.-KB/s    in 0.04s   
+	HSS-SHELL.zip                             100%[==============================================================================================>]   1.07M  --.-KB/s    in 0.04s   
 	
-	2021-02-18 05:45:50 (28.4 MB/s) - ‘CCF_HSS_SHELL.zip’ saved [1119213/1119213]
+	2021-02-18 05:45:50 (28.4 MB/s) - ‘HSS-SHELL.zip’ saved [1119213/1119213]
 
 There is a lot of output here.  Most of it is connection information.  What we care about is that the last few lines seem to indicate that the file was successfully downloaded.
 
 >**Comprehension Check:** How do we check that the file really was downloaded?
 
 > 	$ ls
+
+The new file is a compressed bundle of files.  We can make short work of this with the `unzip` command.
+
+	$ unzip HSS-SHELL.zip
 
 Added to our current directory is PDF file and a directory called LibraryData.  The PDF is a write-up of the walkthrough that we are following for this workshop.  Don't worry, you'll get this on your local computer at the end of the workshop.  The directory holds the data that we'll be using for the rest of the workshop.  Let's go into it and have a look.
 
