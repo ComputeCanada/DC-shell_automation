@@ -634,7 +634,7 @@ You can save the history to a file by making use of a second redirect (the `|` w
 
 Once we have this file we're ready to make a zip file of everything we've done to facilitate easy transfer back to our desktop.  There's a few files we want.  Note the use of the `-r` flag to *recursively* capture the content in `LibraryData/`.
 	
-	$ zip HSSWorkshop.zip history.txt HSSShell.pdf LibraryData/
+	$ zip -r HSSWorkshop.zip history.txt HSSShell.pdf LibraryData/
 	...
 	
 With the zip complete we can close the connection to the remote host.
@@ -649,4 +649,4 @@ The very last thing for us to do is to grab the zip file from the remote system.
 
 	$ scp user001@ccf-hss.c3.ca:HSSWorkshop.zip ~
 
-
+IF YOU ARE USING WINDOWS THEN YOU'LL NEED TO REPLACE THE ~ WITH A .
